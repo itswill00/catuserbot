@@ -7,6 +7,7 @@ from flask import Flask
 import userbot
 from userbot import BOTLOG_CHATID, PM_LOGGER_GROUP_ID
 from userbot.helpers.uptime_pinger import start_uptime_pinger
+from userbot.web import register_web_routes
 
 from .Config import Config
 from .core.logger import logging
@@ -66,6 +67,7 @@ async def init_all():
     await setup_bot()
     await startup_process()
     await externalrepo()
+    await register_web_routes(app)
 
 
 def run_flask():
