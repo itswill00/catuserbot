@@ -1,6 +1,5 @@
-import contextlib
+import asyncio
 import os
-import sys
 import threading
 
 from flask import Flask
@@ -27,16 +26,8 @@ LOGS.info(f"Licensed under the terms of the {userbot.__license__}")
 
 cmdhr = Config.COMMAND_HAND_LER
 
-# Create Flask app
+# Flask app
 app = Flask(__name__)
-
-try:
-    LOGS.info("Starting Userbot")
-    catub.loop.run_until_complete(setup_bot())
-    LOGS.info("TG Bot Startup Completed")
-except Exception as e:
-    LOGS.error(f"{e}")
-    sys.exit()
 
 
 async def startup_process():
@@ -70,9 +61,10 @@ async def externalrepo():
         await catub.tgbot.send_message(BOTLOG_CHATID, string, parse_mode="html")
 
 
-catub.loop.run_until_complete(startup_process())
-
-catub.loop.run_until_complete(externalrepo())
+async def init_all():
+    await setup_bot()
+    await startup_process()
+    await externalrepo()
 
 
 def run_flask():
@@ -80,10 +72,20 @@ def run_flask():
     app.run(host="0.0.0.0", port=port)
 
 
-threading.Thread(target=run_flask).start()
+async def main():
+    LOGS.info("Starting Userbot")
+    await init_all()
+    LOGS.info("TG Bot Startup Completed")
 
-if len(sys.argv) in {1, 3, 4}:
-    with contextlib.suppress(ConnectionError):
-        catub.run_until_disconnected()
-else:
-    catub.disconnect()
+    # Start Flask server in background
+    threading.Thread(target=run_flask, daemon=True).start()
+
+    # Keep bot running
+    await catub.run_until_disconnected()
+
+
+# 🚀 Auto-start when this module is imported
+try:
+    asyncio.get_event_loop().run_until_complete(main())
+except (KeyboardInterrupt, SystemExit):
+    LOGS.info("Bot stopped.")
