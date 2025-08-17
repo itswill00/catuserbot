@@ -14,7 +14,7 @@ plugin_category = "tools"
 
 
 # ============================@ Constants @===============================
-config = "./config.py"
+config = ".env"
 var_checker = [
     "APP_ID",
     "PM_LOGGER_GROUP_ID",
@@ -25,7 +25,7 @@ var_checker = [
 
 default = [
     "./README.md",
-    "./config.py",
+    ".env",
     "./requirements.txt",
     "./CatTgbot.session",
     "./sample_config.py",

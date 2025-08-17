@@ -92,7 +92,7 @@ async def update_bot(event, repo, ups_rem, ac_br):
         repo.git.reset("--hard", "FETCH_HEAD")
     await update_requirements()
     sandy = await event.edit("`Successfully Updated!\nBot is restarting... Wait for a minute!`")
-    if os.path.exists("config.py"):
+    if os.path.exists(".env"):
         from userbot.plugins.vps import reload_codebase
 
         await reload_codebase()
@@ -236,7 +236,7 @@ async def update_deploy(event):
     if ENV:
         if HEROKU_API_KEY is None or HEROKU_APP_NAME is None:
             return await edit_or_reply(event, "`Set the required vars first to update the bot`")
-    elif os.path.exists("config.py"):
+    elif os.path.exists(".env"):
         return await edit_delete(
             event,
             f"I guess you are on selfhost. For self host you need to use `{cmdhd}update now`",
@@ -284,7 +284,7 @@ async def update_deploy(event):
 async def variable(event):  # sourcery skip: low-code-quality
     "To switch between good & bad cat"
     switch = "BADCAT"
-    config = "config.py"
+    config = ".env"
     cmd = event.pattern_match.group(1).lower()
     if ENV:
         if (HEROKU_APP_NAME is None) or (HEROKU_API_KEY is None):

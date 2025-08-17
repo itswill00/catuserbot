@@ -19,14 +19,10 @@ from ..sql_helper.globals import addgvar, gvarstatus
 from .pluginmanager import load_module
 from .tools import create_supergroup
 
-ENV = bool(os.environ.get("ENV", False))
 LOGS = logging.getLogger("CatUBStartUP")
 cmdhr = Config.COMMAND_HAND_LER
 
-if ENV:
-    VPS_NOLOAD = ["vps"]
-elif os.path.exists("config.py"):
-    VPS_NOLOAD = ["heroku"]
+VPS_NOLOAD = ["heroku"]
 
 
 async def setup_bot():
