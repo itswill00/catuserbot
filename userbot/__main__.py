@@ -67,7 +67,7 @@ async def init_all():
     await setup_bot()
     await startup_process()
     await externalrepo()
-    await register_web_routes(app)
+    register_web_routes(app)
 
 
 def run_flask():
