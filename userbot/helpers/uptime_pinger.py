@@ -25,6 +25,6 @@ def start_uptime_pinger():
 
     LOGS.info("[UPTIME PINGER] Initiated")
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(ping, "interval", minutes=1)
+    scheduler.add_job(ping, "interval", minutes=7)
     scheduler.start()
     return scheduler
