@@ -79,6 +79,7 @@ async def main():
     LOGS.info("Starting Userbot")
     await init_all()
     LOGS.info("TG Bot Startup Completed")
+    start_uptime_pinger()
 
     # Start Flask server in background
     threading.Thread(target=run_flask, daemon=True).start()
@@ -94,7 +95,7 @@ if __name__ == "__main__":
     try:
         loop = asyncio.get_event_loop()
         loop.run_until_complete(main())
-        start_uptime_pinger()
+
     except (KeyboardInterrupt, SystemExit):
         LOGS.info("Bot stopped.")
         sys.exit()

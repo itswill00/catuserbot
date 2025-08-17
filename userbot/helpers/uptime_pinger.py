@@ -1,5 +1,5 @@
 import requests
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from userbot import LOGS
 
@@ -21,6 +21,6 @@ def start_uptime_pinger():
         LOGS.info("No PING URL set, skipping uptime pinger")
         return
 
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(ping, "interval", minutes=7)
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(ping, "interval", minutes=1, next_run_time=None)
     scheduler.start()
