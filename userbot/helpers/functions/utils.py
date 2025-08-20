@@ -1,13 +1,14 @@
 import re
 import time
 from datetime import datetime
+from typing import Optional
 
 import requests
 from emoji import get_emoji_regexp
 from telethon.tl.types import Channel, PollAnswer
 
 
-async def upload_to_temp_web(file_path: str, secret: bool = True, expires: int | None = None) -> str:
+async def upload_to_temp_web(file_path: str, secret: bool = True, expires: Optional[int] = None) -> str:
     url = "https://0x0.st"
     headers = {"User-Agent": "MyUploader/1.0"}
     data = {}
