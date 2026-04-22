@@ -74,7 +74,21 @@ fi
 # 4. Configuration Check (.env)
 echo -e "${YELLOW}[4/4] Verifying Configuration...${NC}"
 if [ ! -f ".env" ] && [ ! -f "config.py" ]; then
-    echo -e "${CYAN}[!] Configuration (.env) not found. Starting Interactive Setup...${NC}"
+    echo -e "${CYAN}[!] Configuration file not found.${NC}"
+    echo -n "Do you want to create a template .env file now? (y/n): "
+    read create_env
+    if [ "$create_env" == "y" ]; then
+        cat > .env << EOF
+APP_ID=
+API_HASH=
+STRING_SESSION=
+TG_BOT_TOKEN=
+PRIVATE_GROUP_BOT_API_ID=
+ALIVE_NAME=
+EOF
+        echo -e "${GREEN}[+] .env template created. Please fill it before starting!${NC}"
+    fi
+    echo -e "${YELLOW}[*] Starting Interactive Setup...${NC}"
     python3 -m userbot
 else
     echo -e "${GREEN}[+] Configuration detected.${NC}"
