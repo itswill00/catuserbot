@@ -109,11 +109,10 @@ async def safe_check_text(msg):  # sourcery no-metrics
     phone = str((await catub.get_entity(catub.uid)).phone)
     return bool(
         (
-            (Config.STRING_SESSION in msg)
-            or (phone[-10:] in msg)
-            or (Config.API_HASH in msg)
-            or (Config.TG_BOT_TOKEN in msg)
-            or (Config.HEROKU_API_KEY and Config.HEROKU_API_KEY in msg)
+            (Config.STRING_SESSION and Config.STRING_SESSION in msg)
+            or (phone and phone[-10:] in msg)
+            or (Config.API_HASH and Config.API_HASH in msg)
+            or (Config.TG_BOT_TOKEN and Config.TG_BOT_TOKEN in msg)
             or (Config.OPEN_WEATHER_MAP_APPID and Config.OPEN_WEATHER_MAP_APPID in msg)
             or (Config.IBM_WATSON_CRED_URL and Config.IBM_WATSON_CRED_URL in msg)
             or (Config.OCR_SPACE_API_KEY and Config.OCR_SPACE_API_KEY in msg)

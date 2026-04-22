@@ -21,7 +21,7 @@ from ..sql_helper.global_collection import (
     get_collectionlist_items,
 )
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from . import BOTLOG, BOTLOG_CHATID, HEROKU_APP
+from . import BOTLOG, BOTLOG_CHATID
 
 LOGS = logging.getLogger(__name__)
 plugin_category = "tools"
@@ -61,10 +61,7 @@ async def _(event):
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n" "Bot shut down")
     await edit_or_reply(event, "`Turning off bot now ...Manually turn me on later`")
-    if HEROKU_APP is not None:
-        HEROKU_APP.process_formation()["worker"].scale(0)
-    else:
-        os._exit(143)
+    os._exit(0)
 
 
 @catub.cat_cmd(
