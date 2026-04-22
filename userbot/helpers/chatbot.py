@@ -64,7 +64,6 @@ def generate_edited_response(input_text, instructions):
 
 
 def del_convo(chat_id, checker=False):
-    global conversations
     out_text = "__There is no GPT context to delete for this chat.__"
     # Delete the the context of given chat
     if chat_id in conversations:

@@ -22,6 +22,7 @@ from jikanpy import Jikan
 from jikanpy.exceptions import APIException
 from pySmartDL import SmartDL
 from telegraph import exceptions, upload_file
+from userbot.Config import Config
 
 from userbot import Convert, catub
 
@@ -321,7 +322,6 @@ async def anilist(event):  # sourcery no-metrics
         await catevent.delete()
         os.remove(anime_path)
     except BaseException:
-        image = getBannerLink(first_mal_id, True)
         await event.client.send_file(
             event.chat_id,
             file=image,
@@ -437,7 +437,6 @@ async def anilist(event):  # sourcery no-metrics
         await catevent.delete()
         os.remove(anime_path)
     except BaseException:
-        image = getBannerLink(first_mal_id, True)
         await event.client.send_file(
             event.chat_id,
             file=image,

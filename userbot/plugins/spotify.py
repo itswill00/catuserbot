@@ -281,7 +281,7 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                             "**[INFO]**\n\nEverything returned back to normal, the previous spotify issue has been "
                             "resolved."
                         )
-                        await catub.send_message(BOTLOG_CHATID, string)
+                        await catub.send_message(BOTLOG_CHATID, stringy)
                 elif save_spam("spotify", True):
                     # currently item is not passed when the user plays a
                     # podcast

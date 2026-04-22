@@ -139,11 +139,11 @@ def sudo_cmd(pattern=None, command=None, **args):  # sourcery no-metrics
 
 
 def errors_handler(func):
-    async def wrapper(errors):
+    async def wrapper(event):
         try:
-            await func(errors)
+            await func(event)
         except BaseException:
-            if Config.PRIVATE_GROUP_BOT_API_ID != 0:
+            if Config.PRIVATE_GROUP_BOT_API_ID == 0:
                 return
             date = (datetime.datetime.now()).strftime("%m/%d/%Y, %H:%M:%S")
             ftext = f"\nDisclaimer:\nThis file is pasted only here ONLY here,\
@@ -151,9 +151,9 @@ def errors_handler(func):
                                   \nyou may not report this error if you've\
                                   \nany confidential data here, no one will see your data\
                                   \n\n--------BEGIN USERBOT TRACEBACK LOG--------\
-                                  \nDate: {date}\nGroup ID: {str(check.chat_id)}\
-                                  \nSender ID: {str(check.sender_id)}\
-                                  \n\nEvent Trigger:\n{str(check.text)}\
+                                  \nDate: {date}\nGroup ID: {str(event.chat_id)}\
+                                  \nSender ID: {str(event.sender_id)}\
+                                  \n\nEvent Trigger:\n{str(event.text)}\
                                   \n\nTraceback info:\n{str(traceback.format_exc())}\
                                   \n\nError text:\n{str(sys.exc_info()[1])}"
             new = {
@@ -173,7 +173,7 @@ def errors_handler(func):
             text += f"- just forward this message {link}.\n"
             text += "Nothing is logged except the fact of error and date\n\n"
             text += f"**Error report : ** [{new['error']}]({pastelink})"
-            await check.client.send_message(
+            await event.client.send_message(
                 Config.PRIVATE_GROUP_BOT_API_ID, text, link_preview=False
             )
 

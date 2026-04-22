@@ -204,7 +204,7 @@ async def caschecker(event):
 
 def banchecker(user_id):
     try:
-        casurl = f"https://api.cas.chat/check?user_id={user.id}"
+        casurl = f"https://api.cas.chat/check?user_id={user_id}"
         data = get(casurl).json()
     except Exception as e:
         LOGS.info(e)

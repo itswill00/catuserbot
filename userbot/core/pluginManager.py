@@ -67,7 +67,7 @@ async def install_pip_packages(packages):
 
 def run_async(func: callable):
     """Run async functions with the right event loop."""
-    asyncio.get_event_loop()
+    loop = asyncio.get_event_loop()
     return loop.run_until_complete(func)
 
 

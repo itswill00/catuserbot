@@ -780,7 +780,6 @@ async def check_progress_for_dl(
     event, gid, previous
 ):  # sourcery no-metrics  # sourcery skip: low-code-quality
     complete = None
-    global filenames
     GDRIVE_.is_cancelled = False
     from .torrentutils import aria2
 
