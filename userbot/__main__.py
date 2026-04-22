@@ -15,7 +15,7 @@ import userbot
 from userbot import BOTLOG_CHATID, PM_LOGGER_GROUP_ID
 
 from .Config import Config
-from .core.logger import logging
+from .core.logger import logging, tg_handler
 from .core.session import catub
 from .utils import (
     add_bot_to_logger_group,
@@ -46,6 +46,8 @@ except Exception as e:
     sys.exit()
 
 async def startup_process():
+    tg_handler.set_client(catub, BOTLOG_CHATID)
+    LOGS.info("Centralized Logging initialized.")
     await verifyLoggerGroup()
     
     # Load plugins sequentially to respect dependencies
@@ -69,7 +71,7 @@ async def startup_process():
         await add_bot_to_logger_group(PM_LOGGER_GROUP_ID)
     
     await startupmessage()
-    LOGS.info("CatUserbot started successfully.")
+    LOGS.info(f"CatUserbot v{userbot.__version__} is now Online! [Chat ID: {BOTLOG_CHATID}]")
     return
 
 
