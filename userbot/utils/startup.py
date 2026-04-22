@@ -47,6 +47,10 @@ async def setup_bot():
     """
     try:
         await catub.connect()
+        # Start assistant bot if token is provided
+        if Config.TG_BOT_TOKEN and not catub.tgbot.is_connected():
+            await catub.tgbot.start(bot_token=Config.TG_BOT_TOKEN)
+            
         config = await catub(functions.help.GetConfigRequest())
         for option in config.dc_options:
             if option.ip_address == catub.session.server_address:
@@ -58,11 +62,14 @@ async def setup_bot():
                 catub.session.set_dc(option.id, option.ip_address, option.port)
                 catub.session.save()
                 break
-        bot_details = await catub.tgbot.get_me()
-        Config.TG_BOT_USERNAME = f"@{bot_details.username}"
-        # await catub.start(bot_token=Config.TG_BOT_USERNAME)
+        
+        if catub.tgbot.is_connected():
+            bot_details = await catub.tgbot.get_me()
+            Config.TG_BOT_USERNAME = f"@{bot_details.username}"
+            catub.tgbot.uid = utils.get_peer_id(bot_details)
+        
         catub.me = await catub.get_me()
-        catub.uid = catub.tgbot.uid = utils.get_peer_id(catub.me)
+        catub.uid = utils.get_peer_id(catub.me)
         if Config.OWNER_ID == 0:
             Config.OWNER_ID = utils.get_peer_id(catub.me)
     except Exception as e:

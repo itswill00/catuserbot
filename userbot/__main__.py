@@ -46,14 +46,6 @@ except Exception as e:
     sys.exit()
 
 async def startup_process():
-    # Initialize bot token with proper async handling
-    try:
-        if Config.TG_BOT_TOKEN and not catub.tgbot.is_connected():
-            await catub.tgbot.start(bot_token=Config.TG_BOT_TOKEN)
-            LOGS.info("Telegram bot started successfully")
-    except Exception as e:
-        LOGS.warning(f"Failed to start telegram bot: {e}. Some inline features may not work.")
-    
     await verifyLoggerGroup()
     
     # Load plugins sequentially to respect dependencies
