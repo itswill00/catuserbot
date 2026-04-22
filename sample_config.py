@@ -11,7 +11,7 @@ class Config(object):
     # --- CORE BOT SETTINGS ---
     LOGGER = True
     ALIVE_NAME = os.environ.get("ALIVE_NAME", "CatUserbot")
-    APP_ID = int(os.environ.get("APP_ID", 0)) # Get from my.telegram.org
+    APP_ID = int(os.environ.get("APP_ID") or 0) # Get from my.telegram.org
     API_HASH = os.environ.get("API_HASH", None) # Get from my.telegram.org
     STRING_SESSION = os.environ.get("STRING_SESSION", None)
     
@@ -26,10 +26,10 @@ class Config(object):
     
     # --- LOGGING & PERMIT ---
     # PRIVATE_GROUP_BOT_API_ID is required for logging errors and startup
-    PRIVATE_GROUP_BOT_API_ID = int(os.environ.get("PRIVATE_GROUP_BOT_API_ID", 0))
+    PRIVATE_GROUP_BOT_API_ID = int(os.environ.get("PRIVATE_GROUP_BOT_API_ID") or 0)
     # Set same as above if you want PM logs to go to the same group
-    PM_LOGGER_GROUP_ID = int(os.environ.get("PM_LOGGER_GROUP_ID", 0))
-    OWNER_ID = int(os.environ.get("OWNER_ID", 0))
+    PM_LOGGER_GROUP_ID = int(os.environ.get("PM_LOGGER_GROUP_ID") or 0)
+    OWNER_ID = int(os.environ.get("OWNER_ID") or 0)
     
     # --- CUSTOMIZATION ---
     COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", r".")
