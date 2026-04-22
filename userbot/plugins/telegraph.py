@@ -31,7 +31,9 @@ plugin_category = "utils"
 
 extractor = URLExtract()
 telegraph = Telegraph()
-r = telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
+# Use a default short_name if not configured to avoid SHORT_NAME_REQUIRED error
+short_name = Config.TELEGRAPH_SHORT_NAME or "CatUserbot"
+r = telegraph.create_account(short_name=short_name)
 auth_url = r["auth_url"]
 
 
