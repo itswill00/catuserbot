@@ -191,12 +191,14 @@ async def plugininfo(input_str, event, flag):
 async def grpinfo():
     outstr = "**Plugins in Catuserbot are:**\n\n"
     outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help <plugin name>`\n\n"
-    category = ["admin", "bot", "fun", "misc", "tools", "utils", "extra"]
-    if Config.BADCAT:
-        category.append("useless")
-    for cat in category:
+    # Dynamic categories based on available GRP_INFO keys
+    categories = sorted(list(GRP_INFO.keys()))
+    for cat in categories:
         plugins = GRP_INFO[cat]
-        outstr += f"**{hemojis[cat]} {cat.title()} **({len(plugins)})\n"
+        if not plugins:
+            continue
+        emoji = hemojis.get(cat, "📁") # Fallback emoji for new categories
+        outstr += f"**{emoji} {cat.title()} **({len(plugins)})\n"
         for plugin in plugins:
             outstr += f"`{plugin}`  "
         outstr += "\n\n"
@@ -205,12 +207,14 @@ async def grpinfo():
 
 async def cmdlist():
     outstr = "**Total list of Commands in your Catuserbot are :**\n\n"
-    category = ["admin", "bot", "fun", "misc", "tools", "utils", "extra"]
-    if Config.BADCAT:
-        category.append("useless")
-    for cat in category:
+    # Dynamic categories based on available GRP_INFO keys
+    categories = sorted(list(GRP_INFO.keys()))
+    for cat in categories:
         plugins = GRP_INFO[cat]
-        outstr += f"**{hemojis[cat]} {cat.title()} ** - {len(plugins)}\n\n"
+        if not plugins:
+            continue
+        emoji = hemojis.get(cat, "📁") # Fallback emoji for new categories
+        outstr += f"**{emoji} {cat.title()} ** - {len(plugins)}\n\n"
         for plugin in plugins:
             cmds = PLG_INFO[plugin]
             outstr += f"• **{plugin.title()} has {len(cmds)} commands**\n"
