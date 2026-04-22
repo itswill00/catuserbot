@@ -65,16 +65,15 @@ sudo_enabledcmds = sudo_enabled_cmds()
 class CatUserBotClient(TelegramClient):
     def cat_cmd(
         self: TelegramClient,
-        pattern: str or tuple = None,
-        info: Union[str, Dict[str, Union[str, List[str], Dict[str, str]]]]
-        or tuple = None,
+        pattern: Union[str, tuple] = None,
+        info: Union[str, Dict[str, Union[str, List[str], Dict[str, str]]], tuple] = None,
         groups_only: bool = False,
         private_only: bool = False,
         allow_sudo: bool = True,
         edited: bool = True,
         forword=False,
         disable_errors: bool = False,
-        command: str or tuple = None,
+        command: Union[str, tuple] = None,
         public: bool = False,
         **kwargs,
     ) -> callable:
