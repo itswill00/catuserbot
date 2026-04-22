@@ -7,30 +7,29 @@ from typing import Set
 from telethon.tl.types import ChatBannedRights
 from validators.url import url
 
-class Config(object):
+class ConfigMeta(type):
+    """Metaclass to provide default None for missing Config attributes"""
+    def __getattr__(cls, name):
+        return None
+
+class Config(metaclass=ConfigMeta):
     # --- CORE BOT SETTINGS ---
     LOGGER = True
     ALIVE_NAME = os.environ.get("ALIVE_NAME", "CatUserbot")
-    APP_ID = int(os.environ.get("APP_ID") or 0) # Get from my.telegram.org
-    API_HASH = os.environ.get("API_HASH", None) # Get from my.telegram.org
+    APP_ID = int(os.environ.get("APP_ID") or 0)
+    API_HASH = os.environ.get("API_HASH", None)
     STRING_SESSION = os.environ.get("STRING_SESSION", None)
     
     # --- ASSISTANT BOT SETTINGS ---
     TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", None)
     TG_BOT_USERNAME = os.environ.get("TG_BOT_USERNAME", None)
-    # --- HEROKU SETTINGS (Optional) ---
-    HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
-    HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
     
     # --- DATABASE & PERSISTENCE ---
     DB_URI = os.environ.get("DATABASE_URL", None)
-    # Local cache directory for JSON DB files
     CACHE_PATH = os.environ.get("CACHE_PATH", "./userbot/cache/")
     
     # --- LOGGING & PERMIT ---
-    # PRIVATE_GROUP_BOT_API_ID is required for logging errors and startup
     PRIVATE_GROUP_BOT_API_ID = int(os.environ.get("PRIVATE_GROUP_BOT_API_ID") or 0)
-    # Set same as above if you want PM logs to go to the same group
     PM_LOGGER_GROUP_ID = int(os.environ.get("PM_LOGGER_GROUP_ID") or 0)
     OWNER_ID = int(os.environ.get("OWNER_ID") or 0)
     
@@ -44,21 +43,19 @@ class Config(object):
     UPSTREAM_REPO = os.environ.get("UPSTREAM_REPO", "https://github.com/itswill00/catuserbot")
     UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH", "master")
     EXTERNAL_REPO = os.environ.get("EXTERNAL_REPO", None)
-    EXTERNAL_REPOBRANCH = os.environ.get("EXTERNAL_REPOBRANCH", "master")
-    BADCAT = bool(os.environ.get("BADCAT", False))
-    BADCAT_REPO = os.environ.get("BADCAT_REPO", "https://github.com/TgCatUB/badcatext")
-    BADCAT_REPOBRANCH = os.environ.get("BADCAT_REPOBRANCH", "master")
-    VCMODE = bool(os.environ.get("VCMODE", False))
-    VC_REPO = os.environ.get("VC_REPO", "https://github.com/TgCatUB/catvc")
-    VC_REPOBRANCH = os.environ.get("VC_REPOBRANCH", "master")
-    NO_LOAD = list(os.environ.get("NO_LOAD", "").split())
+    PLUGIN_CHANNEL = int(os.environ.get("PLUGIN_CHANNEL") or 0)
+    
+    # --- PLUGIN SPECIFIC (Missing in Logs) ---
+    FBAN_GROUP_ID = int(os.environ.get("FBAN_GROUP_ID") or 0)
+    FINISHED_PROGRESS_STR = os.environ.get("FINISHED_PROGRESS_STR", "█")
+    UNFINISHED_PROGRESS_STR = os.environ.get("UNFINISHED_PROGRESS_STR", "░")
+    G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
+    G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
     
     # --- EXTERNAL API KEYS ---
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", None)
     SPAMWATCH_API = os.environ.get("SPAMWATCH_API", None)
     GENIUS_API_TOKEN = os.environ.get("GENIUS_API_TOKEN", None)
-    OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
-    REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
     
     # --- SYSTEM PATHS ---
     TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
