@@ -50,8 +50,7 @@ def get_thumb(name=None, url=None):
 
 
 def main_menu():
-    text = f"𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁 𝗛𝗲𝗹𝗽𝗲𝗿\
-        \n𝗣𝗿𝗼𝘃𝗶𝗱𝗲𝗱 𝗯𝘆 {mention}"
+    text = f"**✘ 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁 𝗜𝗻𝘁𝗲𝗿𝗳𝗮𝗰𝗲 ✘**\n\n**👤 ᴏᴡɴᴇʀ :** {mention}\n**⚙️ ꜱʏꜱᴛᴇᴍ :** `v{catub.version}`"
     buttons = [
         (Button.inline("ℹ️ Info", data="check"),),
         (
