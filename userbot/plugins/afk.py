@@ -80,7 +80,7 @@ async def set_not_afk(event):
     )
     
     if BOTLOG:
-        await event.client.send_message(
+        await catub.tgbot.send_message(
             BOTLOG_CHATID,
             f"#AFKFALSE \n`Set AFK mode to False\nBack alive! No Longer afk.\nWas afk for {endtime}`",
         )
@@ -165,7 +165,7 @@ async def set_afk(event):
     await edit_delete(event, f"`I shall be Going afk! {'Reason: ' + reason if reason else ''}`", 5)
     
     if BOTLOG:
-        await event.client.send_message(
+        await catub.tgbot.send_message(
             BOTLOG_CHATID,
             f"#AFKTRUE \nSet AFK mode to True. Alasan: {reason if reason else 'None'}",
         )
@@ -203,7 +203,7 @@ async def set_mafk(event):
     await edit_delete(event, f"`I shall be Going afk (Media)! {'Reason: ' + reason if reason else ''}`", 5)
     
     if BOTLOG:
-        await event.client.send_message(
+        await catub.tgbot.send_message(
             BOTLOG_CHATID,
             f"#AFKTRUE (MEDIA) \nSet AFK mode to True. Alasan: {reason if reason else 'None'}",
         )

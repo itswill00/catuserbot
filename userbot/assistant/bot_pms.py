@@ -70,7 +70,7 @@ async def check_bot_started_users(user, event):
     except Exception as e:
         LOGS.error(str(e))
     if BOTLOG:
-        await event.client.send_message(BOTLOG_CHATID, notification)
+        await catub.tgbot.send_message(BOTLOG_CHATID, notification)
 
 
 @catub.bot_cmd(
@@ -149,11 +149,7 @@ async def bot_start(event):  # sourcery skip: low-code-quality
                 reply_to=reply_to,
             )
     except Exception as e:
-        if BOTLOG:
-            await event.client.send_message(
-                BOTLOG_CHATID,
-                f"**Error**\nThere was a error while user starting your bot.\\\x1f                \n`{e}`",
-            )
+        LOGS.error(f"Error while user starting your bot: {e}")
 
     else:
         await check_bot_started_users(chat, event)
@@ -170,12 +166,7 @@ async def bot_pms(event):  # sourcery no-metrics
         try:
             add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id, 0, 0)
         except Exception as e:
-            LOGS.error(str(e))
-            if BOTLOG:
-                await event.client.send_message(
-                    BOTLOG_CHATID,
-                    f"**Error**\nWhile storing messages details in database\n`{str(e)}`",
-                )
+            LOGS.error(f"Error while storing messages in database: {e}")
     else:
         if event.text.startswith("/"):
             return
@@ -210,11 +201,7 @@ async def bot_pms(event):  # sourcery no-metrics
                 )
             except Exception as e:
                 LOGS.error(str(e))
-                if BOTLOG:
-                    await event.client.send_message(
-                        BOTLOG_CHATID,
-                        f"**Error**\nWhile storing messages details in database\n`{e}`",
-                    )
+                pass
 
 
 @catub.bot_cmd(edited=True)
@@ -240,11 +227,7 @@ async def bot_pms_edit(event):  # sourcery no-metrics
                 add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id, 0, 0)
             except Exception as e:
                 LOGS.error(str(e))
-                if BOTLOG:
-                    await event.client.send_message(
-                        BOTLOG_CHATID,
-                        f"**Error**\nWhile storing messages details in database\n`{e}`",
-                    )
+                pass
 
     else:
         reply_to = await reply_id(event)

@@ -53,10 +53,15 @@ class TelegramLogHandler(logging.Handler):
     async def send_log(self, message):
         try:
             if self.client and self.chat_id:
+                # Use assistant bot (tgbot) for logs if connected, otherwise fallback to client
+                sender = getattr(self.client, "tgbot", self.client)
+                if sender and not sender.is_connected():
+                    sender = self.client # Fallback if bot is not connected
+                
                 # Truncate if too long for Telegram
                 if len(message) > 4000:
                     message = message[:3900] + "\n... (truncated)"
-                await self.client.send_message(self.chat_id, message)
+                await sender.send_message(self.chat_id, message)
         except Exception:
             # Fallback to console if telegram fails
             pass
