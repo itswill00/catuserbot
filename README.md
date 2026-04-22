@@ -1,25 +1,23 @@
-# 🐾 CatUserbot (Modern 2026 Edition)
+# CatUserbot
 
-**CatUserbot** is a Telegram Userbot based on [Telethon](https://github.com/LonamiWebs/Telethon) that has been modernized for high efficiency, maximum stability, and easy setup. This version is fully optimized to run without external database dependencies.
+**CatUserbot** is a Telegram Userbot based on [Telethon](https://github.com/LonamiWebs/Telethon). This version is optimized to run with a local JSON database and simplified setup process.
 
 ![catuserbot logo](https://graph.org/file/4860c8e1a5a56d0616b79.png)
 
 ---
 
-## 🚀 Key Features (Modern & Efficient)
+## Features
 
-- 📦 **100% Local JSON DB:** No need for PostgreSQL, Redis, or other SQL databases. All data (GBAN, Filters, Sudo, etc.) is safely stored locally in a lightweight JSON format.
-- ⚡ **Parallel Plugin Loading:** The bot starts significantly faster thanks to concurrent plugin loading using `asyncio.gather`.
-- 🛠️ **Interactive Terminal Setup:** Running the bot for the first time? It will guide you through configuration directly in the terminal (Auto-generates `.env`).
-- 🐳 **Docker Optimized:** Lightweight Docker image based on Python 3.11-slim, ready to deploy anywhere.
-- 🧠 **AI Ready:** Core architecture is prepared for native AI integration (OpenAI/Gemini).
-- 🛡️ **Smart Error Handling:** Smarter error reporting with automatic tracebacks sent to your private log group.
+- **Local JSON DB:** Uses a lightweight JSON database for all storage (GBAN, Filters, Sudo, etc.), eliminating the need for external SQL databases.
+- **Improved Performance:** Faster plugin loading using concurrent execution.
+- **Interactive Setup:** Guided configuration directly in the terminal for first-time users.
+- **Docker Support:** Optimized Dockerfile using Python 3.11-slim.
 
 ---
 
-## 🛠️ Installation & Setup
+## Installation & Setup
 
-### ⚡ Run Locally (Fastest Way)
+### Local Setup
 
 1. **Clone the Repository:**
    ```bash
@@ -36,11 +34,11 @@
    ```bash
    python3 -m userbot
    ```
-   *If you don't have a configuration file yet, the bot will automatically enter **Interactive Setup Mode** in your terminal.*
+   *Follow the interactive prompts in the terminal to configure your bot.*
 
 ---
 
-### 🐳 Using Docker
+### Docker Setup
 
 1. **Build the Image:**
    ```bash
@@ -54,39 +52,31 @@
 
 ---
 
-## 📂 Data Structure (Local DB)
+## Data Management
 
-Since we are using **Local JSON DB**, all your data is stored in:
+All persistent data is stored in the following directory:
 `userbot/cache/*.json`
 
-*Make sure to backup the `userbot/cache/` folder if you want to move the bot to another server so your filters, blacklists, and sudo data are not lost.*
+---
+
+## Support
+
+- **Channel:** [@catuserbot17](https://t.me/catuserbot17)
+- **Group:** [@catuserbot_support](https://t.me/catuserbot_support)
 
 ---
 
-## 🤝 Support & Community
-
-If you find a bug or need help, please contact us at:
-- 📢 **Channel:** [@catuserbot17](https://t.me/catuserbot17)
-- 👥 **Group Support:** [@catuserbot_support](https://t.me/catuserbot_support)
-
----
-
-## ⚠️ Disclaimer
+## Disclaimer
 
 ```text
-              IMPORTANT: BANNED RISK
-Your Telegram account may get banned if you misuse this bot (Spamming/Flooding).
-We (the developers) are not responsible for any risks to your account.
-Use this bot wisely for productivity and fun purposes.
+Your Telegram account may get banned if you misuse this bot.
+Developers are not responsible for any risks to your account.
+Use this bot wisely.
 ```
 
 ---
 
-## ❤️ Credits & Inspiration
+## Credits
 
 - [Telethon](https://github.com/LonamiWebs/Telethon/) by LonamiWebs.
-- [CatUserBot Original Team](https://github.com/TgCatUB/catuserbot) for the original foundation.
-- All contributors and the Telegram Userbot community.
-
----
-**Made with ❤️ and high-performance code.**
+- [CatUserBot Original Team](https://github.com/TgCatUB/catuserbot).

@@ -38,11 +38,11 @@ LOGS.info(f"Licensed under the terms of the {userbot.__license__}")
 cmdhr = Config.COMMAND_HAND_LER
 
 try:
-    LOGS.info("Starting CatUserbot...")
+    LOGS.info("Connecting...")
     catub.loop.run_until_complete(setup_bot())
-    LOGS.info("Client connected and database (JSON) initialized.")
+    LOGS.info("Client connected.")
 except Exception as e:
-    LOGS.error(f"Failed to setup bot: {e}")
+    LOGS.error(f"Failed to start: {e}")
     sys.exit()
 
 async def startup_process():
@@ -52,7 +52,7 @@ async def startup_process():
         load_plugins("plugins"),
         load_plugins("assistant")
     )
-    LOGS.info("Plugins loaded successfully.")
+    LOGS.info("Plugins loaded.")
     
     # Extra setup
     await add_bot_to_logger_group(BOTLOG_CHATID)
@@ -60,7 +60,7 @@ async def startup_process():
         await add_bot_to_logger_group(PM_LOGGER_GROUP_ID)
     
     await startupmessage()
-    LOGS.info("CatUserbot is now LIVE!")
+    LOGS.info("CatUserbot started.")
     return
 
 
