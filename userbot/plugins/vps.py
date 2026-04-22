@@ -190,7 +190,6 @@ async def variable(event):
         await event.client.send_message(
             BOTLOG_CHATID, f"#VAR #CONFIG_VAR {logtext}", silent=True
         )
-        await reload_codebase()
         await event.client.reload(cat)
 
 
@@ -220,5 +219,4 @@ async def reload(event):
             os.remove(i)
         for i in cmds:
             await _catutils.runcmd(i)
-    await reload_codebase()
     await event.client.reload(cat)
