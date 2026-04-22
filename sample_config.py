@@ -18,6 +18,9 @@ class Config(object):
     # --- ASSISTANT BOT SETTINGS ---
     TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", None)
     TG_BOT_USERNAME = os.environ.get("TG_BOT_USERNAME", None)
+    # --- HEROKU SETTINGS (Optional) ---
+    HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
+    HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
     
     # --- DATABASE & PERSISTENCE ---
     DB_URI = os.environ.get("DATABASE_URL", None)

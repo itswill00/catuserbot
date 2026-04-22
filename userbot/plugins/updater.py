@@ -38,7 +38,15 @@ LOGS = logging.getLogger(__name__)
 
 HEROKU_APP_NAME = Config.HEROKU_APP_NAME or None
 HEROKU_API_KEY = Config.HEROKU_API_KEY or None
-Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
+
+# Heroku is optional
+Heroku = None
+if HEROKU_API_KEY:
+    try:
+        Heroku = heroku3.from_key(HEROKU_API_KEY)
+    except Exception:
+        Heroku = None
+
 BADCAT = Config.BADCAT
 heroku_api = "https://api.heroku.com"
 
