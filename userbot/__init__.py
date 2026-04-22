@@ -45,28 +45,70 @@ signal.signal(signal.SIGTERM, close_connection)
 
 UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
 
+def _validate_chat_id(chat_id_val, db_key, is_botlog=False):
+    """
+    Safely validate and convert chat ID from config or database.
+    Returns tuple of (chat_id, is_valid)
+    """
+    try:
+        if isinstance(chat_id_val, str):
+            chat_id_val = int(chat_id_val)
+        
+        if not chat_id_val or chat_id_val == 0:
+            db_value = gvarstatus(db_key)
+            if db_value is None:
+                if is_botlog:
+                    LOGS.warning(f"{db_key} not configured, logging disabled")
+                return (-100, False) if not is_botlog else ("me", False)
+            try:
+                chat_id_val = int(db_value)
+            except (ValueError, TypeError):
+                LOGS.error(f"Invalid {db_key} format in database: {db_value}")
+                return (-100, False) if not is_botlog else ("me", False)
+        
+        # Convert positive channel IDs to negative format
+        if isinstance(chat_id_val, int) and chat_id_val > 0 and is_botlog:
+            chat_id_val = -chat_id_val
+        
+        return (chat_id_val, True)
+    except (ValueError, TypeError) as e:
+        LOGS.error(f"Failed to validate {db_key}: {e}")
+        return (-100, False) if not is_botlog else ("me", False)
+
+# Validate BOTLOG settings with better error handling
 if Config.PRIVATE_GROUP_BOT_API_ID == 0:
-    if gvarstatus("PRIVATE_GROUP_BOT_API_ID") is None:
+    db_value = gvarstatus("PRIVATE_GROUP_BOT_API_ID")
+    if db_value is None:
         Config.BOTLOG = False
         Config.BOTLOG_CHATID = "me"
+        LOGS.warning("BOTLOG disabled: PRIVATE_GROUP_BOT_API_ID not configured")
     else:
-        Config.BOTLOG_CHATID = int(gvarstatus("PRIVATE_GROUP_BOT_API_ID"))
-        Config.PRIVATE_GROUP_BOT_API_ID = int(gvarstatus("PRIVATE_GROUP_BOT_API_ID"))
-        Config.BOTLOG = True
+        Config.BOTLOG_CHATID, is_valid = _validate_chat_id(db_value, "PRIVATE_GROUP_BOT_API_ID", True)
+        if is_valid:
+            Config.PRIVATE_GROUP_BOT_API_ID = Config.BOTLOG_CHATID
+            Config.BOTLOG = True
+            LOGS.info(f"BOTLOG enabled for chat {Config.BOTLOG_CHATID}")
+        else:
+            Config.BOTLOG = False
+            Config.BOTLOG_CHATID = "me"
 else:
-    if str(Config.PRIVATE_GROUP_BOT_API_ID)[0] != "-":
-        Config.BOTLOG_CHATID = int(f"-{str(Config.PRIVATE_GROUP_BOT_API_ID)}")
+    Config.BOTLOG_CHATID, is_valid = _validate_chat_id(Config.PRIVATE_GROUP_BOT_API_ID, "PRIVATE_GROUP_BOT_API_ID", True)
+    if is_valid:
+        Config.BOTLOG = True
+        LOGS.info(f"BOTLOG enabled for chat {Config.BOTLOG_CHATID}")
     else:
-        Config.BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
-    Config.BOTLOG = True
+        Config.BOTLOG = False
+        Config.BOTLOG_CHATID = "me"
 
+# Validate PM_LOGGER settings
 if Config.PM_LOGGER_GROUP_ID == 0:
-    if gvarstatus("PM_LOGGER_GROUP_ID") is None:
-        Config.PM_LOGGER_GROUP_ID = -100
+    db_value = gvarstatus("PM_LOGGER_GROUP_ID") or gvarstatus("PM_LOGGR_BOT_API_ID")
+    if db_value:
+        Config.PM_LOGGER_GROUP_ID, _ = _validate_chat_id(db_value, "PM_LOGGER_GROUP_ID")
     else:
-        Config.PM_LOGGER_GROUP_ID = int(gvarstatus("PM_LOGGER_GROUP_ID"))
-elif str(Config.PM_LOGGER_GROUP_ID)[0] != "-":
-    Config.PM_LOGGER_GROUP_ID = int(f"-{str(Config.PM_LOGGER_GROUP_ID)}")
+        Config.PM_LOGGER_GROUP_ID = -100
+else:
+    Config.PM_LOGGER_GROUP_ID, _ = _validate_chat_id(Config.PM_LOGGER_GROUP_ID, "PM_LOGGER_GROUP_ID")
 
 try:
     if Config.HEROKU_API_KEY is not None or Config.HEROKU_APP_NAME is not None:

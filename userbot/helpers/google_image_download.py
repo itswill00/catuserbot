@@ -480,6 +480,14 @@ def user_input():
 
 class googleimagesdownload:
     def __init__(self):
+        import logging
+        LOGS = logging.getLogger("GoogleImageDownload")
+        LOGS.warning(
+            "⚠️  DEPRECATED: Google Images scraper is outdated and unreliable. "
+            "Google actively blocks automated scraping. "
+            "This module is kept for backward compatibility only. "
+            "Consider using Bing Image Search, DuckDuckGo, or other APIs instead."
+        )
         pass
 
     def _extract_data_pack(self, page):

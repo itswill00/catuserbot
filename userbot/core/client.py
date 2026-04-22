@@ -154,8 +154,18 @@ class CatUserBotClient(TelegramClient):
                     )
                     await check.delete()
                     await asyncio.sleep(e.seconds + 5)
-                except BaseException as e:
-                    LOGS.exception(e)
+                except ConnectionError as e:
+                    LOGS.error(f"Connection error: {e}")
+                    await edit_delete(check, "`Connection error occurred. Retrying...`")
+                except TimeoutError as e:
+                    LOGS.error(f"Request timeout: {e}")
+                    await edit_delete(check, "`Request timed out. Please try again.`")
+                except PermissionError as e:
+                    LOGS.error(f"Permission denied: {e}")
+                    await edit_delete(check, "`I don't have permission to do that.`")
+                except Exception as e:
+                    # Catch specific errors before generic BaseException
+                    LOGS.exception(f"Plugin error in {func.__name__}: {e}")
                     if not disable_errors:
                         if Config.PRIVATE_GROUP_BOT_API_ID == 0:
                             return
@@ -163,29 +173,38 @@ class CatUserBotClient(TelegramClient):
                         ftext = (
                             f"\n--------BEGIN USERBOT TRACEBACK LOG--------\n"
                             f"Date: {date}\n"
+                            f"Plugin: {func.__name__}\n"
                             f"Group ID: {check.chat_id}\n"
                             f"Sender ID: {check.sender_id}\n"
                             f"Message Link: {await check.client.get_msg_link(check)}\n\n"
                             f"Event Trigger: {check.text}\n\n"
                             f"Traceback info:\n{traceback.format_exc()}\n"
                             f"Error text: {e}\n"
+                            f"Error type: {type(e).__name__}\n"
                             f"--------END USERBOT TRACEBACK LOG--------"
                         )
                         
-                        command = 'git log --pretty=format:"%an: %s" -5'
-                        output = await runcmd(command)
-                        ftext += f"\n\nLast 5 commits:\n{output[0] + output[1]}"
+                        try:
+                            command = 'git log --pretty=format:"%an: %s" -5'
+                            output = await runcmd(command)
+                            ftext += f"\n\nLast 5 commits:\n{output[0] + output[1]}"
+                        except Exception as git_err:
+                            LOGS.warning(f"Could not get git log: {git_err}")
                         
-                        pastelink = await paste_message(ftext, pastetype="s", markdown=False)
-                        text = (
-                            f"**CatUserbot Error Report**\n\n"
-                            f"**Error:** `{e}`\n"
-                            f"**Full Log:** [Click Here]({pastelink})\n"
-                            f"Join @catuserbot_support for help."
-                        )
-                        await check.client.send_message(
-                            Config.PRIVATE_GROUP_BOT_API_ID, text, link_preview=False
-                        )
+                        try:
+                            pastelink = await paste_message(ftext, pastetype="s", markdown=False)
+                            text = (
+                                f"**CatUserbot Error Report**\n\n"
+                                f"**Plugin:** `{func.__name__}`\n"
+                                f"**Error:** `{type(e).__name__}: {str(e)[:100]}`\n"
+                                f"**Full Log:** [Click Here]({pastelink})\n"
+                                f"Join @catuserbot_support for help."
+                            )
+                            await check.client.send_message(
+                                Config.PRIVATE_GROUP_BOT_API_ID, text, link_preview=False
+                            )
+                        except Exception as report_err:
+                            LOGS.error(f"Failed to send error report: {report_err}")
 
             from .session import catub
 

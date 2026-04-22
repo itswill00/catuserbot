@@ -67,14 +67,26 @@ async def img_sampler(event):
     # passing the arguments to the function
     try:
         paths = response.download(arguments)
+        lst = paths[0][query.replace(",", " ")]
+        try:
+            await event.client.send_file(event.chat_id, lst, reply_to=reply_to_id)
+        except MediaEmptyError:
+            for i in lst:
+                with contextlib.suppress(MediaEmptyError):
+                    await event.client.send_file(event.chat_id, i, reply_to=reply_to_id)
+        shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
+        await cat.delete()
+    except RuntimeError as e:
+        # Google Images scraper is deprecated
+        await cat.edit(
+            "❌ **Image Search Not Available**\n\n"
+            "The Google Images scraper is deprecated and no longer works.\n"
+            "Google blocks automated scraping.\n\n"
+            "**Alternatives:**\n"
+            "• Use web browsers directly\n"
+            "• Try Bing Image Search API\n"
+            "• Use DuckDuckGo Images\n"
+            "• Check Unsplash or Pexels"
+        )
     except Exception as e:
-        return await cat.edit(f"Error: \n`{e}`")
-    lst = paths[0][query.replace(",", " ")]
-    try:
-        await event.client.send_file(event.chat_id, lst, reply_to=reply_to_id)
-    except MediaEmptyError:
-        for i in lst:
-            with contextlib.suppress(MediaEmptyError):
-                await event.client.send_file(event.chat_id, i, reply_to=reply_to_id)
-    shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
-    await cat.delete()
+        await cat.edit(f"Error: `{str(e)[:100]}`")

@@ -142,40 +142,54 @@ def errors_handler(func):
     async def wrapper(event):
         try:
             await func(event)
-        except BaseException:
-            if Config.PRIVATE_GROUP_BOT_API_ID == 0:
+        except Exception as e:
+            # Only report errors if BOTLOG is enabled
+            if Config.PRIVATE_GROUP_BOT_API_ID == 0 or not Config.BOTLOG:
+                LOGS.error(f"Error in {func.__name__}: {e}", exc_info=True)
                 return
-            date = (datetime.datetime.now()).strftime("%m/%d/%Y, %H:%M:%S")
-            ftext = f"\nDisclaimer:\nThis file is pasted only here ONLY here,\
-                                  \nwe logged only fact of error and date,\nwe respect your privacy,\
-                                  \nyou may not report this error if you've\
-                                  \nany confidential data here, no one will see your data\
-                                  \n\n--------BEGIN USERBOT TRACEBACK LOG--------\
-                                  \nDate: {date}\nGroup ID: {str(event.chat_id)}\
-                                  \nSender ID: {str(event.sender_id)}\
-                                  \n\nEvent Trigger:\n{str(event.text)}\
-                                  \n\nTraceback info:\n{str(traceback.format_exc())}\
-                                  \n\nError text:\n{str(sys.exc_info()[1])}"
-            new = {
-                "error": str(sys.exc_info()[1]),
-                "date": datetime.datetime.now(),
-            }
-
-            ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
-            command = 'git log --pretty=format:"%an: %s" -5'
-            ftext += "\n\n\nLast 5 commits:\n"
-            output = (await runcmd(command))[:2]
-            result = output[0] + output[1]
-            ftext += result
-            pastelink = await paste_message(ftext)
-            link = "[here](https://t.me/catuserbot_support)"
-            text = "**CatUserbot Error report**\n\n" + "If you wanna you can report it"
-            text += f"- just forward this message {link}.\n"
-            text += "Nothing is logged except the fact of error and date\n\n"
-            text += f"**Error report : ** [{new['error']}]({pastelink})"
-            await event.client.send_message(
-                Config.PRIVATE_GROUP_BOT_API_ID, text, link_preview=False
-            )
+            
+            try:
+                date = (datetime.datetime.now()).strftime("%m/%d/%Y, %H:%M:%S")
+                ftext = (
+                    f"\nDisclaimer:\n"
+                    f"This file is pasted only here ONLY here,\n"
+                    f"we logged only fact of error and date,\n"
+                    f"we respect your privacy,\n"
+                    f"you may not report this error if you've\n"
+                    f"any confidential data here, no one will see your data\n\n"
+                    f"--------BEGIN USERBOT TRACEBACK LOG--------\n"
+                    f"Date: {date}\n"
+                    f"Plugin: {func.__name__}\n"
+                    f"Group ID: {str(event.chat_id)}\n"
+                    f"Sender ID: {str(event.sender_id)}\n\n"
+                    f"Event Trigger:\n{str(event.text)}\n\n"
+                    f"Traceback info:\n{str(traceback.format_exc())}\n\n"
+                    f"Error text:\n{str(sys.exc_info()[1])}"
+                )
+                
+                ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
+                
+                try:
+                    command = 'git log --pretty=format:"%an: %s" -5'
+                    output = (await runcmd(command))[:2]
+                    result = output[0] + output[1]
+                    ftext += f"\n\nLast 5 commits:\n{result}"
+                except Exception as git_err:
+                    LOGS.warning(f"Could not append git log: {git_err}")
+                
+                pastelink = await paste_message(ftext)
+                link = "[here](https://t.me/catuserbot_support)"
+                text = (
+                    "**CatUserbot Error report**\n\n"
+                    f"If you wanna, you can report it {link}.\n"
+                    "Nothing is logged except the fact of error and date\n\n"
+                    f"**Error report:** [{sys.exc_info()[1]}]({pastelink})"
+                )
+                await event.client.send_message(
+                    Config.PRIVATE_GROUP_BOT_API_ID, text, link_preview=False
+                )
+            except Exception as report_err:
+                LOGS.error(f"Failed to send error report: {report_err}", exc_info=True)
 
     return wrapper
 
@@ -190,25 +204,31 @@ def register(**args):
     disable_edited = args.get("disable_edited", True)
     allow_sudo = args.get("allow_sudo", False)
 
+    # Make pattern case-insensitive if not already
     if pattern is not None and not pattern.startswith("(?i)"):
-        args["pattern"] = f"(?i){pattern}"
+        try:
+            args["pattern"] = f"(?i){pattern}"
+        except (TypeError, AttributeError) as e:
+            LOGS.warning(f"Invalid pattern: {e}")
 
     if "disable_edited" in args:
         del args["disable_edited"]
 
     reg = re.compile("(.*)")
     if pattern is not None:
-        with contextlib.suppress(BaseException):
+        try:
             cmd = re.search(reg, pattern)
-            with contextlib.suppress(BaseException):
+            if cmd:
                 cmd = cmd[1].replace("$", "").replace("\\", "").replace("^", "")
             try:
                 CMD_LIST[file_test].append(cmd)
-            except BaseException:
+            except KeyError:
                 CMD_LIST.update({file_test: [cmd]})
+        except (TypeError, AttributeError) as e:
+            LOGS.debug(f"Could not process pattern: {e}")
+    
     if allow_sudo:
         args["from_users"] = list(Config.SUDO_USERS)
-        # Mutually exclusive with outgoing (can only set one of either).
         args["incoming"] = True
         del args["allow_sudo"]
 
@@ -227,7 +247,7 @@ def register(**args):
         catub.add_event_handler(func, NewMessage(**args))
         try:
             LOAD_PLUG[file_test].append(func)
-        except Exception:
+        except KeyError:
             LOAD_PLUG.update({file_test: [func]})
         return func
 
@@ -247,25 +267,35 @@ def command(**args):
     args["outgoing"] = True
     if bool(args["incoming"]):
         args["outgoing"] = False
-    with contextlib.suppress(BaseException):
+    # Make pattern case-insensitive if not already
+    try:
         if pattern is not None and not pattern.startswith("(?i)"):
             args["pattern"] = f"(?i){pattern}"
+    except (TypeError, AttributeError) as e:
+        LOGS.warning(f"Invalid pattern format: {e}")
+    
     reg = re.compile("(.*)")
     if pattern is not None:
-        with contextlib.suppress(BaseException):
+        try:
             cmd = re.search(reg, pattern)
-            with contextlib.suppress(BaseException):
+            if cmd:
                 cmd = cmd[1].replace("$", "").replace("\\", "").replace("^", "")
             try:
                 CMD_LIST[file_test].append(cmd)
-            except BaseException:
+            except KeyError:
                 CMD_LIST.update({file_test: [cmd]})
+        except (TypeError, AttributeError) as e:
+            LOGS.debug(f"Could not process command pattern: {e}")
+    
     if allow_sudo:
         args["from_users"] = list(Config.SUDO_USERS)
         args["incoming"] = True
     del allow_sudo
-    with contextlib.suppress(BaseException):
+    try:
         del args["allow_sudo"]
+    except KeyError:
+        pass
+    
     if gvarstatus("blacklist_chats") is not None:
         args["blacklist_chats"] = True
         args["chats"] = blacklist_chats_list()
@@ -276,7 +306,7 @@ def command(**args):
         catub.add_event_handler(func, NewMessage(**args))
         try:
             LOAD_PLUG[file_test].append(func)
-        except BaseException:
+        except KeyError:
             LOAD_PLUG.update({file_test: [func]})
         return func
 

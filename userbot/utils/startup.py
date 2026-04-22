@@ -179,13 +179,19 @@ async def load_plugins(folder, extfolder=None):
                             if check > 5:
                                 break
                 else:
-                    os.remove(Path(f"{plugin_path}/{shortname}.py"))
+                    # Plugin is in NO_LOAD or VPS_NOLOAD list, remove it
+                    try:
+                        os.remove(Path(f"{plugin_path}/{shortname}.py"))
+                    except OSError as rm_err:
+                        LOGS.warning(f"Could not remove disabled plugin {shortname}: {rm_err}")
             except Exception as e:
+                # IMPORTANT: Do NOT delete plugin files on errors
+                # Plugin may fail to load due to temporary issues (missing dependencies, etc)
                 if shortname not in failure:
                     failure.append(shortname)
-                os.remove(Path(f"{plugin_path}/{shortname}.py"))
-                LOGS.info(
-                    f"unable to load {shortname} because of error {e}\nBase Folder {plugin_path}"
+                LOGS.warning(
+                    f"unable to load {shortname} because of error {e}\nBase Folder {plugin_path}\n"
+                    f"Plugin file kept for recovery. Check the error above."
                 )
     if extfolder:
         if not failure:

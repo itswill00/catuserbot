@@ -46,12 +46,29 @@ except Exception as e:
     sys.exit()
 
 async def startup_process():
+    # Initialize bot token with proper async handling
+    try:
+        if Config.TG_BOT_TOKEN and not catub.tgbot.is_connected():
+            await catub.tgbot.start(bot_token=Config.TG_BOT_TOKEN)
+            LOGS.info("Telegram bot started successfully")
+    except Exception as e:
+        LOGS.warning(f"Failed to start telegram bot: {e}. Some inline features may not work.")
+    
     await verifyLoggerGroup()
-    # Load plugins concurrently
-    await asyncio.gather(
-        load_plugins("plugins"),
-        load_plugins("assistant")
-    )
+    
+    # Load plugins sequentially to respect dependencies
+    LOGS.info("Loading assistant plugins...")
+    try:
+        await load_plugins("assistant")
+    except Exception as e:
+        LOGS.error(f"Error loading assistant plugins: {e}")
+    
+    LOGS.info("Loading main plugins...")
+    try:
+        await load_plugins("plugins")
+    except Exception as e:
+        LOGS.error(f"Error loading main plugins: {e}")
+    
     LOGS.info("Plugins loaded.")
     
     # Extra setup
@@ -60,7 +77,7 @@ async def startup_process():
         await add_bot_to_logger_group(PM_LOGGER_GROUP_ID)
     
     await startupmessage()
-    LOGS.info("CatUserbot started.")
+    LOGS.info("CatUserbot started successfully.")
     return
 
 

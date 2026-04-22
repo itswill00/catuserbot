@@ -7,6 +7,7 @@
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import asyncio
 import sys
 
 from telethon.network.connection.tcpabridged import ConnectionTcpAbridged
@@ -14,10 +15,10 @@ from telethon.sessions import StringSession
 
 from ..Config import Config
 from .client import CatUserBotClient
+from .logger import logging
 
 __version__ = "3.3.0"
-
-loop = None
+LOGS = logging.getLogger("Session")
 
 if Config.STRING_SESSION:
     session = StringSession(str(Config.STRING_SESSION))
@@ -29,24 +30,30 @@ try:
         session=session,
         api_id=Config.APP_ID,
         api_hash=Config.API_HASH,
-        loop=loop,
         app_version=__version__,
         connection=ConnectionTcpAbridged,
         auto_reconnect=True,
         connection_retries=None,
     )
 except Exception as e:
-    print(f"STRING_SESSION - {e}")
-    sys.exit()
+    LOGS.critical(f"Failed to initialize user client: {e}")
+    sys.exit(1)
 
+# Initialize bot client but don't start it yet
+# It will be started properly in __main__.py with proper async context
+try:
+    catub.tgbot = CatUserBotClient(
+        session="CatTgbot",
+        api_id=Config.APP_ID,
+        api_hash=Config.API_HASH,
+        app_version=__version__,
+        connection=ConnectionTcpAbridged,
+        auto_reconnect=True,
+        connection_retries=None,
+    )
+except Exception as e:
+    LOGS.critical(f"Failed to initialize bot client: {e}")
+    sys.exit(1)
 
-catub.tgbot = tgbot = CatUserBotClient(
-    session="CatTgbot",
-    api_id=Config.APP_ID,
-    api_hash=Config.API_HASH,
-    loop=loop,
-    app_version=__version__,
-    connection=ConnectionTcpAbridged,
-    auto_reconnect=True,
-    connection_retries=None,
-).start(bot_token=Config.TG_BOT_TOKEN)
+# Placeholder for tgbot that will be set after proper async start
+tgbot = None
