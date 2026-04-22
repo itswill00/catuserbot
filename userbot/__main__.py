@@ -7,6 +7,7 @@
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import asyncio
 import contextlib
 import sys
 
@@ -24,6 +25,10 @@ from .utils import (
     startupmessage,
     verifyLoggerGroup,
 )
+from .utils.setup_helper import interactive_setup
+
+# Run interactive setup if vars are missing
+interactive_setup()
 
 LOGS = logging.getLogger("CatUserbot")
 
@@ -33,34 +38,29 @@ LOGS.info(f"Licensed under the terms of the {userbot.__license__}")
 cmdhr = Config.COMMAND_HAND_LER
 
 try:
-    LOGS.info("Starting Userbot")
+    LOGS.info("Starting CatUserbot...")
     catub.loop.run_until_complete(setup_bot())
-    LOGS.info("TG Bot Startup Completed")
+    LOGS.info("Client connected and database (JSON) initialized.")
 except Exception as e:
-    LOGS.error(f"{e}")
+    LOGS.error(f"Failed to setup bot: {e}")
     sys.exit()
-
 
 async def startup_process():
     await verifyLoggerGroup()
-    await load_plugins("plugins")
-    await load_plugins("assistant")
-    LOGS.info(
-        "============================================================================"
+    # Load plugins concurrently
+    await asyncio.gather(
+        load_plugins("plugins"),
+        load_plugins("assistant")
     )
-    LOGS.info("||               Yay your userbot is officially working.!!!")
-    LOGS.info(
-        f"||   Congratulation, now type {cmdhr}alive to see message if catub is live"
-    )
-    LOGS.info("||   If you need assistance, head to https://t.me/catuserbot_support")
-    LOGS.info(
-        "============================================================================"
-    )
-    await verifyLoggerGroup()
+    LOGS.info("Plugins loaded successfully.")
+    
+    # Extra setup
     await add_bot_to_logger_group(BOTLOG_CHATID)
     if PM_LOGGER_GROUP_ID != -100:
         await add_bot_to_logger_group(PM_LOGGER_GROUP_ID)
+    
     await startupmessage()
+    LOGS.info("CatUserbot is now LIVE!")
     return
 
 

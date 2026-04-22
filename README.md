@@ -1,65 +1,92 @@
-# CatUserbot
+# 🐾 CatUserbot (Modern 2026 Edition)
 
-A simple Telegram userbot based on Telethon .
+**CatUserbot** adalah Telegram Userbot berbasis [Telethon](https://github.com/LonamiWebs/Telethon) yang telah dimodernisasi untuk efisiensi tinggi, stabilitas maksimal, dan kemudahan setup. Versi ini telah dioptimalkan sepenuhnya untuk berjalan tanpa ketergantungan database eksternal.
+
 ![catuserbot logo](https://graph.org/file/4860c8e1a5a56d0616b79.png)
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://github.com/TgCatUB/catuserbot)
-[![CodeFactor](https://www.codefactor.io/repository/github/TgCatUB/catuserbot/badge?&style=flat-square)](https://www.codefactor.io/repository/github/TgCatUB/catuserbot)
-[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green?&style=flat-square)](https://GitHub.com/TgCatUB/catuserbot/graphs/commit-activity)
-![Repo Size](https://img.shields.io/github/repo-size/TgCatUB/catuserbot?&style=flat-square&logo=github)
-[![GitHub license](https://img.shields.io/github/license/TgCatUB/catuserbot?&style=flat-square&logo=github)](https://github.com/TgCatUB/catuserbot/blob/master/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/TgCatUB/catuserbot?&style=flat-square&logo=github)](https://github.com/TgCatUB/catuserbot/issues)
-[![PR Open](https://img.shields.io/github/issues-pr/TgCatUB/catuserbot?&style=flat-square&logo=github)](https://github.com/TgCatUB/catuserbot/pulls)
-[![PR Closed](https://img.shields.io/github/issues-pr-closed/TgCatUB/catuserbot?&style=flat-square&logo=github)](https://github.com/TgCatUB/catuserbot/pulls?q=is:closed)
-[![GitHub contributors](https://img.shields.io/github/contributors/TgCatUB/catuserbot?&style=flat-square&logo=github)](https://GitHub.com/TgCatUB/catuserbot/graphs/contributors/)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/TgCatUB/catuserbot?&style=flat-square&logo=github)](https://github.com/TgCatUB/catuserbot/graphs/commit-activity)
-[![GitHub forks](https://img.shields.io/github/forks/TgCatUB/catuserbot?&style=flat-square&logo=github)](https://github.com/TgCatUB/catuserbot/fork)
-[![GitHub stars](https://img.shields.io/github/stars/TgCatUB/catuserbot?&style=flat-square&logo=github)](https://github.com/TgCatUB/catuserbot/stargazers)
 
-## How to deploy catuserbot
+---
 
-### Heroku Deploy
+## 🚀 Fitur Unggulan (Modern & Efficient)
 
-- [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://github.com/TgCatUB/nekopack)
+- 📦 **100% Local JSON DB:** Tidak butuh PostgreSQL, Redis, atau SQL lainnya. Semua data (GBAN, Filter, Sudo, dll) tersimpan aman di lokal dalam format JSON yang ringan.
+- ⚡ **Parallel Plugin Loading:** Bot menyala jauh lebih cepat berkat sistem pemuatan plugin secara konkuren menggunakan `asyncio.gather`.
+- 🛠️ **Interactive Terminal Setup:** Pertama kali menjalankan bot? Bot akan memandu Anda melakukan konfigurasi langsung di terminal (Auto-generate `.env`).
+- 🐳 **Docker Optimized:** Image Docker yang lebih ringan berbasis Python 3.11-slim, siap dideploy di mana saja.
+- 🧠 **AI Ready:** Arsitektur core telah disiapkan untuk integrasi AI (OpenAI/Gemini) secara native.
+- 🛡️ **Smart Error Handling:** Pelaporan error yang lebih cerdas dengan traceback otomatis yang dikirim ke grup log pribadi Anda.
 
-### Self host
+---
 
-- [**Check Docs**](https://tgcatub.gitbook.io/catuserbot/installation/hosting)
-  
-## Support
+## 🛠️ Cara Install & Setup
 
-   <a href="https://t.me/catuserbot17"><img src="https://img.shields.io/badge/Channel%20Support%3F-yes-green?&style=flat-square?&logo=telegram" width=220px></a></p>
-   <a href="https://t.me/catuserbot_support"><img src="https://img.shields.io/badge/Group%20Support%3F-yes-green?&style=flat-square?&logo=telegram" width=220px></a></p>
+### ⚡ Jalankan Secara Lokal (Cara Tercepat)
 
-## Inspiration
+1. **Clone Repositori:**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/catuserbot.git
+   cd catuserbot
+   ```
 
-- [X-tra-Telegram](https://github.com/Dark-Princ3/X-tra-Telegram)
-- [Uniborg](https://github.com/SpEcHiDe/UniBorg) & [Uniborg fork](https://github.com/ravana69/PornHub)
-- Nana-Remix
-- [Userge-X](https://github.com/code-rgb/USERGE-X/)
+2. **Instal Dependensi:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## Disclaimer
+3. **Jalankan Bot:**
+   ```bash
+   python3 -m userbot
+   ```
+   *Jika Anda belum memiliki file konfigurasi, bot akan otomatis masuk ke **Mode Setup Interaktif** di terminal Anda.*
 
+---
+
+### 🐳 Menggunakan Docker
+
+1. **Build Image:**
+   ```bash
+   docker build -t catuserbot .
+   ```
+
+2. **Jalankan Container:**
+   ```bash
+   docker run -it --env-file .env catuserbot
+   ```
+
+---
+
+## 📂 Struktur Data (Local DB)
+
+Karena kita menggunakan **Local JSON DB**, seluruh data Anda tersimpan di direktori:
+`userbot/cache/*.json`
+
+*Pastikan Anda melakukan backup folder `userbot/cache/` jika ingin memindahkan bot ke server lain agar data filter, blacklist, dan sudo Anda tidak hilang.*
+
+---
+
+## 🤝 Dukungan & Komunitas
+
+Jika Anda menemukan bug atau membutuhkan bantuan, silakan hubungi kami di:
+- 📢 **Channel:** [@catuserbot17](https://t.me/catuserbot17)
+- 👥 **Group Support:** [@catuserbot_support](https://t.me/catuserbot_support)
+
+---
+
+## ⚠️ Disclaimer
+
+```text
+              PENTING: RISIKO BANNED
+Akun Telegram Anda mungkin terkena banned jika menyalahgunakan bot ini (Spamming/Flooding).
+Kami (Pengembang) tidak bertanggung jawab atas segala risiko pada akun Anda.
+Gunakan bot ini dengan bijak untuk tujuan produktivitas dan kesenangan.
 ```
-              YOU ARE FOREWARNED
-Your Telegram account may get banned.   
-Catuserbot or we are not responsible for your account, 
-This bot is intended for the purpose of having fun with some fun commands 
-and group management with some helpfull commands.
 
-If  you ended up spamming groups, getting reported left and right, 
-and you ended up in being fight with Telegram 
-and at the end Telegram Team deleted your account. DON'T BLAME US.
+---
 
-No personal support will be provided / We won't spoon feed you. 
-If you need help ask in our support group 
-and we or our friends will try to help you.
+## ❤️ Credits & Inspiration
 
-Thanks for using our bot 😺
-```
+- [Telethon](https://github.com/LonamiWebs/Telethon/) oleh LonamiWebs.
+- [CatUserBot Original Team](https://github.com/TgCatUB/catuserbot) untuk fondasi awalnya.
+- Seluruh kontributor dan komunitas Userbot Telegram.
 
-## Credits
-
-- Special thanks to [LonamiWebs](https://github.com/LonamiWebs/Telethon/) for Telethon library.
-- To all devs of these [Userbots](https://github.com/TgCatUB/catuserbot/tree/bugs#inspiration)
-- Finally to all [contributors of Catuserbot](https://github.com/TgCatUB/catuserbot/graphs/contributors)
+---
+**Made with ❤️ and high-performance code.**

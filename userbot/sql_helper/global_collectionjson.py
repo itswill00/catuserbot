@@ -7,58 +7,34 @@
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-from sqlalchemy import Column, UnicodeText
-from sqlalchemy_json import MutableJson, NestedMutableJson
+from .json_db import JsonDB
 
-from . import BASE, SESSION
+gcoldb = JsonDB("cat_collections")
 
-
-class Cat_GlobalCollection_Json(BASE):
-    __tablename__ = "cat_globalcollectionjson"
-    keywoard = Column(UnicodeText, primary_key=True)
-    json = Column(MutableJson)
-    njson = Column(NestedMutableJson)
-
+class Cat_GlobalCollection_Json:
     def __init__(self, keywoard, json, njson):
         self.keywoard = keywoard
         self.json = json
         self.njson = njson
 
-
-Cat_GlobalCollection_Json.__table__.create(checkfirst=True)
-
-
 def get_collection(keywoard):
-    try:
-        return SESSION.query(Cat_GlobalCollection_Json).get(keywoard)
-    finally:
-        SESSION.close()
-
+    res = gcoldb.get(str(keywoard))
+    if res:
+        return Cat_GlobalCollection_Json(keywoard, res["json"], res["njson"])
+    return None
 
 def add_collection(keywoard, json, njson=None):
     if njson is None:
         njson = {}
-    if to_check := get_collection(keywoard):
-        keyword_items = SESSION.query(Cat_GlobalCollection_Json).get(keywoard)
-        SESSION.delete(keyword_items)
-    keyword_items = Cat_GlobalCollection_Json(keywoard, json, njson)
-    SESSION.add(keyword_items)
-    SESSION.commit()
+    gcoldb.set(str(keywoard), {"json": json, "njson": njson})
     return True
-
 
 def del_collection(keywoard):
-    to_check = get_collection(keywoard)
-    if not to_check:
-        return False
-    keyword_items = SESSION.query(Cat_GlobalCollection_Json).get(keywoard)
-    SESSION.delete(keyword_items)
-    SESSION.commit()
-    return True
-
+    if gcoldb.get(str(keywoard)):
+        gcoldb.delete(str(keywoard))
+        return True
+    return False
 
 def get_collections():
-    try:
-        return SESSION.query(Cat_GlobalCollection_Json).all()
-    finally:
-        SESSION.close()
+    raw_data = gcoldb.get_all()
+    return [Cat_GlobalCollection_Json(k, v["json"], v["njson"]) for k, v in raw_data.items()]

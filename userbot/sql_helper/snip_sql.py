@@ -7,61 +7,30 @@
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-from sqlalchemy import Column, Numeric, UnicodeText
+from .json_db import notes_db as ndb
 
-from . import BASE, SESSION
-
-
-class Note(BASE):
-    __tablename__ = "catsnip"
-    keyword = Column(UnicodeText, primary_key=True, nullable=False)
-    reply = Column(UnicodeText)
-    f_mesg_id = Column(Numeric)
-
+class Note:
     def __init__(self, keyword, reply, f_mesg_id):
         self.keyword = keyword
         self.reply = reply
         self.f_mesg_id = f_mesg_id
 
-
-Note.__table__.create(checkfirst=True)
-
-
 def get_note(keyword):
-    try:
-        return SESSION.query(Note).get(keyword)
-    finally:
-        SESSION.close()
-
+    if res := ndb.get(str(keyword)):
+        return Note(keyword, res["reply"], res["f_mesg_id"])
+    return None
 
 def get_notes():
-    try:
-        return SESSION.query(Note).all()
-    finally:
-        SESSION.close()
-
+    raw_data = ndb.get_all()
+    return [Note(kw, data["reply"], data["f_mesg_id"]) for kw, data in raw_data.items()]
 
 def add_note(keyword, reply, f_mesg_id):
-    to_check = get_note(keyword)
-    if not to_check:
-        adder = Note(keyword, reply, f_mesg_id)
-        SESSION.add(adder)
-        SESSION.commit()
-        return True
-    rem = SESSION.query(Note).get(keyword)
-    SESSION.delete(rem)
-    SESSION.commit()
-    adder = Note(keyword, reply, f_mesg_id)
-    SESSION.add(adder)
-    SESSION.commit()
-    return False
-
+    is_new = not ndb.get(str(keyword))
+    ndb.set(str(keyword), {"reply": reply, "f_mesg_id": f_mesg_id})
+    return is_new
 
 def rm_note(keyword):
-    to_check = get_note(keyword)
-    if not to_check:
-        return False
-    rem = SESSION.query(Note).get(keyword)
-    SESSION.delete(rem)
-    SESSION.commit()
-    return True
+    if ndb.get(str(keyword)):
+        ndb.delete(str(keyword))
+        return True
+    return False

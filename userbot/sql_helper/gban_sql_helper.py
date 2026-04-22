@@ -7,53 +7,31 @@
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-from sqlalchemy import Column, String
+from .json_db import gban_db as gdb
 
-from . import BASE, SESSION
-
-
-class GBan(BASE):
-    __tablename__ = "gban"
-    chat_id = Column(String(14), primary_key=True)
-    reason = Column(String(127))
-
+class GBan:
     def __init__(self, chat_id, reason=""):
-        self.chat_id = chat_id
-        self.reason = reason
-
-
-GBan.__table__.create(checkfirst=True)
-
+        self.chat_id = str(chat_id)
+        self.reason = str(reason)
 
 def is_gbanned(chat_id):
-    try:
-        return SESSION.query(GBan).filter(GBan.chat_id == str(chat_id)).one()
-    except BaseException:
-        return None
-    finally:
-        SESSION.close()
-
+    res = gdb.get(str(chat_id))
+    if res:
+        return GBan(str(chat_id), res)
+    return None
 
 def get_gbanuser(chat_id):
-    try:
-        return SESSION.query(GBan).get(str(chat_id))
-    finally:
-        SESSION.close()
-
+    res = gdb.get(str(chat_id))
+    if res:
+        return GBan(str(chat_id), res)
+    return None
 
 def catgban(chat_id, reason):
-    adder = GBan(str(chat_id), str(reason))
-    SESSION.add(adder)
-    SESSION.commit()
-
+    gdb.set(str(chat_id), str(reason))
 
 def catungban(chat_id):
-    if rem := SESSION.query(GBan).get(str(chat_id)):
-        SESSION.delete(rem)
-        SESSION.commit()
-
+    gdb.delete(str(chat_id))
 
 def get_all_gbanned():
-    rem = SESSION.query(GBan).all()
-    SESSION.close()
-    return rem
+    raw_data = gdb.get_all()
+    return [GBan(chat_id, reason) for chat_id, reason in raw_data.items()]

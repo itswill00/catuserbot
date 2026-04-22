@@ -7,50 +7,16 @@
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-from sqlalchemy import Column, String, UnicodeText
-
-from . import BASE, SESSION
-
-
-class Globals(BASE):
-    __tablename__ = "globals"
-    variable = Column(String, primary_key=True, nullable=False)
-    value = Column(UnicodeText, primary_key=True, nullable=False)
-
-    def __init__(self, variable, value):
-        self.variable = str(variable)
-        self.value = value
-
-
-Globals.__table__.create(checkfirst=True)
-
+from .json_db import global_db as gdb
 
 def gvarstatus(variable):
-    try:
-        return (
-            SESSION.query(Globals)
-            .filter(Globals.variable == str(variable))
-            .first()
-            .value
-        )
-    except BaseException:
-        return None
-    finally:
-        SESSION.close()
-
+    """Mendapatkan nilai variabel dari database JSON."""
+    return gdb.get(str(variable))
 
 def addgvar(variable, value):
-    if SESSION.query(Globals).filter(Globals.variable == str(variable)).one_or_none():
-        delgvar(variable)
-    adder = Globals(str(variable), value)
-    SESSION.add(adder)
-    SESSION.commit()
-
+    """Menambah atau memperbarui variabel di database JSON."""
+    gdb.set(str(variable), value)
 
 def delgvar(variable):
-    if rem := (
-        SESSION.query(Globals)
-        .filter(Globals.variable == str(variable))
-        .delete(synchronize_session="fetch")
-    ):
-        SESSION.commit()
+    """Menghapus variabel dari database JSON."""
+    gdb.delete(str(variable))

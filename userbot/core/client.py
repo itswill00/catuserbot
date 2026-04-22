@@ -77,45 +77,36 @@ class CatUserBotClient(TelegramClient):
         command: str or tuple = None,
         public: bool = False,
         **kwargs,
-    ) -> callable:  # sourcery no-metrics
+    ) -> callable:
+        """Enhanced CatUserBot command decorator."""
         if not public:
             kwargs["func"] = kwargs.get("func", lambda e: e.via_bot_id is None)
         kwargs.setdefault("forwards", forword)
+        
         if gvarstatus("blacklist_chats") is not None:
             kwargs["blacklist_chats"] = True
             kwargs["chats"] = blacklist_chats_list()
+            
         stack = inspect.stack()
-        previous_stack_frame = stack[1]
-        file_test = Path(previous_stack_frame.filename)
-        file_test = file_test.stem.replace(".py", "")
+        file_test = Path(stack[1].filename).stem.replace(".py", "")
+        
         if command is not None:
-            command = list(command)
-            if command[1] not in BOT_INFO:
-                BOT_INFO.append(command[1])
-            try:
-                if file_test not in GRP_INFO[command[1]]:
-                    GRP_INFO[command[1]].append(file_test)
-            except BaseException:
-                GRP_INFO.update({command[1]: [file_test]})
-            try:
-                if command[0] not in PLG_INFO[file_test]:
-                    PLG_INFO[file_test].append(command[0])
-            except BaseException:
-                PLG_INFO.update({file_test: [command[0]]})
-            if command[0] not in CMD_INFO:
-                CMD_INFO[command[0]] = [_format_about(info)]
+            cmd_name, category = command[0], command[1]
+            if category not in BOT_INFO:
+                BOT_INFO.append(category)
+            GRP_INFO.setdefault(category, []).append(file_test)
+            PLG_INFO.setdefault(file_test, []).append(cmd_name)
+            if cmd_name not in CMD_INFO:
+                CMD_INFO[cmd_name] = [_format_about(info)]
+
         if pattern is not None:
-            if (
-                pattern.startswith(r"\#")
-                or not pattern.startswith(r"\#")
-                and pattern.startswith(r"^")
-            ):
+            if pattern.startswith((r"\#", r"^")):
                 REGEX_.regex1 = REGEX_.regex2 = re.compile(pattern)
             else:
-                reg1 = "\\" + Config.COMMAND_HAND_LER
-                reg2 = "\\" + Config.SUDO_COMMAND_HAND_LER
-                REGEX_.regex1 = re.compile(reg1 + pattern)
-                REGEX_.regex2 = re.compile(reg2 + pattern)
+                handler = re.escape(Config.COMMAND_HAND_LER)
+                sudo_handler = re.escape(Config.SUDO_COMMAND_HAND_LER)
+                REGEX_.regex1 = re.compile(f"^{handler}{pattern}")
+                REGEX_.regex2 = re.compile(f"^{sudo_handler}{pattern}")
 
         def decorator(func):  # sourcery no-metrics
             async def wrapper(check):  # sourcery no-metrics
@@ -168,41 +159,30 @@ class CatUserBotClient(TelegramClient):
                     if not disable_errors:
                         if Config.PRIVATE_GROUP_BOT_API_ID == 0:
                             return
-                        date = (datetime.datetime.now()).strftime("%m/%d/%Y, %H:%M:%S")
-                        ftext = f"\nDisclaimer:\nThis file is pasted only here ONLY here,\
-                                  \nwe logged only fact of error and date,\nwe respect your privacy,\
-                                  \nyou may not report this error if you've\
-                                  \nany confidential data here, no one will see your data\
-                                  \n\n--------BEGIN USERBOT TRACEBACK LOG--------\
-                                  \nDate: {date}\nGroup ID: {str(check.chat_id)}\
-                                  \nSender ID: {str(check.sender_id)}\
-                                  \nMessage Link: {await check.client.get_msg_link(check)}\
-                                  \n\nEvent Trigger:\n{str(check.text)}\
-                                  \n\nTraceback info:\n{str(traceback.format_exc())}\
-                                  \n\nError text:\n{str(sys.exc_info()[1])}"
-                        new = {
-                            "error": str(sys.exc_info()[1]),
-                            "date": datetime.datetime.now(),
-                        }
-                        ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
-                        ftext += "\n\n\nLast 5 commits:\n"
+                        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        ftext = (
+                            f"\n--------BEGIN USERBOT TRACEBACK LOG--------\n"
+                            f"Date: {date}\n"
+                            f"Group ID: {check.chat_id}\n"
+                            f"Sender ID: {check.sender_id}\n"
+                            f"Message Link: {await check.client.get_msg_link(check)}\n\n"
+                            f"Event Trigger: {check.text}\n\n"
+                            f"Traceback info:\n{traceback.format_exc()}\n"
+                            f"Error text: {e}\n"
+                            f"--------END USERBOT TRACEBACK LOG--------"
+                        )
+                        
                         command = 'git log --pretty=format:"%an: %s" -5'
-                        output = (await runcmd(command))[:2]
-                        result = output[0] + output[1]
-                        ftext += result
-                        pastelink = await paste_message(
-                            ftext, pastetype="s", markdown=False
-                        )
-                        link = "[here](https://t.me/catuserbot_support)"
+                        output = await runcmd(command)
+                        ftext += f"\n\nLast 5 commits:\n{output[0] + output[1]}"
+                        
+                        pastelink = await paste_message(ftext, pastetype="s", markdown=False)
                         text = (
-                            "**CatUserbot Error report**\n\n"
-                            + "If you wanna you can report it"
+                            f"**CatUserbot Error Report**\n\n"
+                            f"**Error:** `{e}`\n"
+                            f"**Full Log:** [Click Here]({pastelink})\n"
+                            f"Join @catuserbot_support for help."
                         )
-                        text += f"- just forward this message {link}.\n"
-                        text += (
-                            "Nothing is logged except the fact of error and date\n\n"
-                        )
-                        text += f"**Error report : ** [{new['error']}]({pastelink})"
                         await check.client.send_message(
                             Config.PRIVATE_GROUP_BOT_API_ID, text, link_preview=False
                         )

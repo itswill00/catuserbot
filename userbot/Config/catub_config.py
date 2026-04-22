@@ -10,10 +10,18 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import os
+from dotenv import load_dotenv
+
+# Load .env file if it exists
+if os.path.exists(".env"):
+    load_dotenv(".env")
 
 ENV = bool(os.environ.get("ENV", False))
 
-if ENV:
+if ENV or os.environ.get("STRING_SESSION"):
     from sample_config import Config  # noqa
 elif os.path.exists("config.py"):
     from config import Development as Config  # noqa
+else:
+    # Fallback to sample_config if nothing else is found but env vars might be set
+    from sample_config import Config
