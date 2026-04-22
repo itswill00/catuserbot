@@ -129,11 +129,23 @@ async def build_article(
 
 async def help_article(event):
     help_info = main_menu()
+    help_pic = (
+        gvarstatus("HELP_PIC")
+        or gvarstatus("IALIVE_PIC")
+        or gvarstatus("ALIVE_PIC")
+        or "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png"
+    )
+    if help_pic:
+        CAT = list(help_pic.split())
+        PIC = random.choice(CAT)
+    else:
+        PIC = None
     return await build_article(
         event,
         title="Help Menu",
         description="Help menu for CatUserbot.",
         thumbnail=get_thumb("help.png"),
+        media=PIC,
         text=help_info[0],
         buttons=help_info[1],
     )
