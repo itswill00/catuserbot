@@ -55,5 +55,5 @@ except Exception as e:
     LOGS.critical(f"Failed to initialize bot client: {e}")
     sys.exit(1)
 
-# Placeholder for tgbot that will be set after proper async start
-tgbot = None
+# Export tgbot for assistant plugins
+tgbot = catub.tgbot
