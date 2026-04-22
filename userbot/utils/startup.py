@@ -36,10 +36,6 @@ LOGS = logging.getLogger("CatUBStartUP")
 cmdhr = Config.COMMAND_HAND_LER
 
 VPS_NOLOAD = []
-if ENV:
-    VPS_NOLOAD = ["vps"]
-elif os.path.exists("config.py"):
-    VPS_NOLOAD = ["heroku"]
 
 
 async def setup_bot():

@@ -1,9 +1,9 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # Copyright (C) 2020-2023 by TgCatUB@Github.
-
+#
 # This file is part of: https://github.com/TgCatUB/catuserbot
 # and is released under the "GNU v3.0 License Agreement".
-
+#
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -12,7 +12,6 @@ import os
 import re
 import time
 
-import heroku3
 import requests
 import spamwatch as spam_watch
 from validators.url import url
@@ -31,18 +30,6 @@ bot = catub
 LOGS = logging.getLogger(__name__)
 USERID = catub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
 ALIVE_NAME = Config.ALIVE_NAME
-
-# Heroku is optional
-Heroku = None
-if Config.HEROKU_API_KEY:
-    try:
-        Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
-    except Exception:
-        Heroku = None
-
-heroku_api = "https://api.heroku.com"
-HEROKU_APP_NAME = Config.HEROKU_APP_NAME
-HEROKU_API_KEY = Config.HEROKU_API_KEY
 
 thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
 

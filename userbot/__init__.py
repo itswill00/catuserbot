@@ -11,7 +11,6 @@ import signal
 import sys
 import time
 
-import heroku3
 import typing
 
 # Polyfill for Python < 3.11 (Self is required by lyricsgenius)
@@ -119,15 +118,6 @@ if Config.PM_LOGGER_GROUP_ID == 0:
 else:
     Config.PM_LOGGER_GROUP_ID, _ = _validate_chat_id(Config.PM_LOGGER_GROUP_ID, "PM_LOGGER_GROUP_ID")
 
-try:
-    if Config.HEROKU_API_KEY is not None or Config.HEROKU_APP_NAME is not None:
-        HEROKU_APP = heroku3.from_key(Config.HEROKU_API_KEY).apps()[
-            Config.HEROKU_APP_NAME
-        ]
-    else:
-        HEROKU_APP = None
-except Exception:
-    HEROKU_APP = None
 
 
 # Global Configiables

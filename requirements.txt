@@ -14,7 +14,6 @@ google-auth-httplib2
 google-auth-oauthlib
 gtts
 hachoir
-heroku3
 html-telegraph-poster
 httpx[http2]
 humanize

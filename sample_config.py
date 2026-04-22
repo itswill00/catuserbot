@@ -62,9 +62,6 @@ class Config(metaclass=ConfigMeta):
     SPAMWATCH_API = os.environ.get("SPAMWATCH_API", None)
     GENIUS_API_TOKEN = os.environ.get("GENIUS_API_TOKEN", None)
 
-    # --- HEROKU SETTINGS ---
-    HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
-    HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
 
     # --- SYSTEM PATHS ---
     TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
