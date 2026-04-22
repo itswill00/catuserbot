@@ -243,10 +243,6 @@ async def verifyLoggerGroup():
             LOGS.error(
                 "PRIVATE_GROUP_BOT_API_ID is unsupported. Make sure it's correct."
             )
-        LOGS.info(
-            "Permissions missing to invite users for "
-            "the specified PRIVATE_GROUP_BOT_API_ID."
-        )
     else:
         descript = (
             "Don't delete this group or change to group (If you change group "
