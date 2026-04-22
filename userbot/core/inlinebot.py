@@ -697,15 +697,17 @@ async def on_plug_in_callback_query_handler(event):
     )
 )
 @check_owner
-async def on_plug_in_callback_query_handler(event):
+async def back_callback_handler(event):
     mtype = str(event.pattern_match.group(1).decode("UTF-8"))
     category = str(event.pattern_match.group(2).decode("UTF-8"))
     pgno = int(event.pattern_match.group(3).decode("UTF-8"))
     if mtype == "plugin":
         buttons = paginate_help(pgno, GRP_INFO[category], category)
-        text = f"**Category: **`{category}`\
-            \n**Total plugins :** __{len(GRP_INFO[category])}__\
-            \n**Total Commands:** __{command_in_category(category)}__"
+        text = (
+            f"**Category: **`{category}`\n"
+            f"**Total plugins :** __{len(GRP_INFO[category])}__\n"
+            f"**Total Commands:** __{command_in_category(category)}__"
+        )
     else:
         category_plugins = str(event.pattern_match.group(4).decode("UTF-8"))
         category_pgno = int(event.pattern_match.group(5).decode("UTF-8"))
@@ -725,7 +727,7 @@ async def on_plug_in_callback_query_handler(event):
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(rb"mainmenu")))
 @check_owner
-async def on_plug_in_callback_query_handler(event):
+async def main_menu_callback_handler(event):
     _result = main_menu()
     await event.edit(_result[0], buttons=_result[1])
 
@@ -734,7 +736,7 @@ async def on_plug_in_callback_query_handler(event):
     CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)_([a-z]+)_?([a-z]+)?_?(.*)?"))
 )
 @check_owner
-async def on_plug_in_callback_query_handler(event):
+async def prev_callback_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
     current_page_number = int(event.data_match.group(2).decode("UTF-8"))
     htype = str(event.pattern_match.group(3).decode("UTF-8"))
@@ -765,7 +767,7 @@ async def on_plug_in_callback_query_handler(event):
     CallbackQuery(data=re.compile(rb"(.*)_next\((.+?)\)_([a-z]+)_?([a-z]+)?_?(.*)?"))
 )
 @check_owner
-async def on_plug_in_callback_query_handler(event):
+async def next_callback_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
     current_page_number = int(event.data_match.group(2).decode("UTF-8"))
     htype = str(event.pattern_match.group(3).decode("UTF-8"))
@@ -795,7 +797,7 @@ async def on_plug_in_callback_query_handler(event):
     )
 )
 @check_owner
-async def on_plug_in_callback_query_handler(event):
+async def cmd_help_callback_handler(event):
     cmd = str(event.pattern_match.group(1).decode("UTF-8"))
     category = str(event.pattern_match.group(2).decode("UTF-8"))
     pgno = int(event.pattern_match.group(3).decode("UTF-8"))

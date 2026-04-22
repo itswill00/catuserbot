@@ -88,7 +88,9 @@ async def startupmessage():
                 BOTLOG_CHATID,
                 "https://graph.org/file/4e3ba8e8f7e535d5a2abe.jpg",
                 caption="**Your CatUserbot has been started successfully.**",
-                buttons=[(Button.url("Support", "https://t.me/catuserbot_support"),)],
+                buttons=[
+                    (Button.url("Support", "https://t.me/catuserbot_support"),)
+                ],
             )
     except Exception as e:
         LOGS.error(e)
@@ -191,14 +193,17 @@ async def load_plugins(folder, extfolder=None):
                     try:
                         os.remove(Path(f"{plugin_path}/{shortname}.py"))
                     except OSError as rm_err:
-                        LOGS.warning(f"Could not remove disabled plugin {shortname}: {rm_err}")
+                        LOGS.warning(
+                            f"Could not remove disabled plugin {shortname}: {rm_err}"
+                        )
             except Exception as e:
                 # IMPORTANT: Do NOT delete plugin files on errors
                 # Plugin may fail to load due to temporary issues (missing dependencies, etc)
                 if shortname not in failure:
                     failure.append(shortname)
                 LOGS.warning(
-                    f"unable to load {shortname} because of error {e}\nBase Folder {plugin_path}\n"
+                    f"unable to load {shortname} because of error {e}\n"
+                    f"Base Folder {plugin_path}\n"
                     f"Plugin file kept for recovery. Check the error above."
                 )
     if extfolder:
@@ -221,7 +226,8 @@ async def verifyLoggerGroup():
                     and entity.default_banned_rights.send_messages
                 ) or not entity.admin_rights.post_messages:
                     LOGS.info(
-                        "Permissions missing to send messages for the specified PRIVATE_GROUP_BOT_API_ID."
+                        "Permissions missing to send messages for "
+                        "the specified PRIVATE_GROUP_BOT_API_ID."
                     )
                 if (
                     entity.default_banned_rights

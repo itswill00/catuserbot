@@ -4,8 +4,7 @@
 
 import os
 from typing import Set
-from telethon.tl.types import ChatBannedRights
-from validators.url import url
+
 
 class ConfigMeta(type):
     """Metaclass to provide default empty string for missing Config attributes"""
@@ -40,10 +39,14 @@ class Config(metaclass=ConfigMeta):
     COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", r".")
     SUDO_COMMAND_HAND_LER = os.environ.get("SUDO_COMMAND_HAND_LER", r".")
     TZ = os.environ.get("TZ", "Asia/Kolkata")
-    THUMB_IMAGE = os.environ.get("THUMB_IMAGE", "https://graph.org/file/ca95524e4734b0d5461b5.jpg")
+    THUMB_IMAGE = os.environ.get(
+        "THUMB_IMAGE", "https://graph.org/file/ca95524e4734b0d5461b5.jpg"
+    )
     
     # --- UPSTREAM & PLUGINS ---
-    UPSTREAM_REPO = os.environ.get("UPSTREAM_REPO", "https://github.com/itswill00/catuserbot")
+    UPSTREAM_REPO = os.environ.get(
+        "UPSTREAM_REPO", "https://github.com/itswill00/catuserbot"
+    )
     UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH", "master")
     EXTERNAL_REPO = os.environ.get("EXTERNAL_REPO", None)
     PLUGIN_CHANNEL = int(os.environ.get("PLUGIN_CHANNEL") or 0)

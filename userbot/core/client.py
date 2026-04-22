@@ -141,7 +141,7 @@ class CatUserBotClient(TelegramClient):
                 except ChatSendMediaForbiddenError:
                     await edit_delete(check, "`You can't send media in this chat`")
                 except AlreadyInConversationError:
-                    await edit_delete(
+                    return await edit_delete(
                         check,
                         "`A conversation is already happening with the given chat. try again after some time.`",
                     )
@@ -151,7 +151,8 @@ class CatUserBotClient(TelegramClient):
                     )
                 except FloodWaitError as e:
                     LOGS.error(
-                        f"A flood wait of {e.seconds} occured. wait for {e.seconds} seconds and try"
+                        f"A flood wait of {e.seconds} occured. "
+                        f"wait for {e.seconds} seconds and try"
                     )
                     await check.delete()
                     await asyncio.sleep(e.seconds + 5)
