@@ -44,6 +44,13 @@ class Config(object):
     UPSTREAM_REPO = os.environ.get("UPSTREAM_REPO", "https://github.com/itswill00/catuserbot")
     UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH", "master")
     EXTERNAL_REPO = os.environ.get("EXTERNAL_REPO", None)
+    EXTERNAL_REPOBRANCH = os.environ.get("EXTERNAL_REPOBRANCH", "master")
+    BADCAT = bool(os.environ.get("BADCAT", False))
+    BADCAT_REPO = os.environ.get("BADCAT_REPO", "https://github.com/TgCatUB/badcatext")
+    BADCAT_REPOBRANCH = os.environ.get("BADCAT_REPOBRANCH", "master")
+    VCMODE = bool(os.environ.get("VCMODE", False))
+    VC_REPO = os.environ.get("VC_REPO", "https://github.com/TgCatUB/catvc")
+    VC_REPOBRANCH = os.environ.get("VC_REPOBRANCH", "master")
     NO_LOAD = list(os.environ.get("NO_LOAD", "").split())
     
     # --- EXTERNAL API KEYS ---
