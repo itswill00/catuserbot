@@ -29,6 +29,10 @@ class TelegramLogHandler(logging.Handler):
             self.loop.create_task(self.flush_buffer())
 
     def emit(self, record):
+        # AVOID FEEDBACK LOOP: Do not log messages from telethon or the logger itself
+        if record.name.startswith(("telethon", "urllib3", "aiohttp")):
+            return
+
         log_entry = self.format(record)
         
         # Add emoji based on level
@@ -73,19 +77,26 @@ class TelegramLogHandler(logging.Handler):
                 
                 if chunk:
                     await self.send_log("\n\n---\n\n".join(chunk))
-                    await asyncio.sleep(1) # Small delay to avoid flood
+                    await asyncio.sleep(2) # Delay to avoid flood
         finally:
             self.is_flushing = False
 
 # Global handler instance
 tg_handler = TelegramLogHandler()
+tg_handler.setLevel(logging.INFO) # Allow info from userbot
 
+# Base Logging to File and Console ONLY
 logging.basicConfig(
     format="[%(levelname)s- %(asctime)s]- %(name)s- %(message)s",
-    handlers=[logging.FileHandler("catub.log"), logging.StreamHandler(), tg_handler],
+    handlers=[logging.FileHandler("catub.log"), logging.StreamHandler()],
     level=logging.INFO,
     datefmt="%H:%M:%S",
 )
 
+# Attach TG Handler ONLY to CatUserbot specific loggers to avoid library spam/loops
+cat_logger = logging.getLogger("CatUserbot")
+cat_logger.addHandler(tg_handler)
+
+# Suppress library logs
 logging.getLogger("telethon.client.updates").setLevel(logging.WARNING)
 logging.getLogger("telethon.network").setLevel(logging.WARNING)
