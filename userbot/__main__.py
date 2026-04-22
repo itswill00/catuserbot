@@ -94,12 +94,19 @@ async def externalrepo():
         await catub.tgbot.send_message(BOTLOG_CHATID, string, parse_mode="html")
 
 
-catub.loop.run_until_complete(startup_process())
-
-catub.loop.run_until_complete(externalrepo())
-
-if len(sys.argv) in {1, 3, 4}:
-    with contextlib.suppress(ConnectionError):
-        catub.run_until_disconnected()
-else:
+try:
+    catub.loop.run_until_complete(startup_process())
+    catub.loop.run_until_complete(externalrepo())
+    if len(sys.argv) in {1, 3, 4}:
+        with contextlib.suppress(ConnectionError):
+            catub.run_until_disconnected()
+    else:
+        catub.disconnect()
+except KeyboardInterrupt:
+    LOGS.info("Bot stopped by user (CTRL+C).")
     catub.disconnect()
+except Exception as e:
+    LOGS.error(f"Unexpected error: {e}")
+    catub.disconnect()
+finally:
+    sys.exit(0)
