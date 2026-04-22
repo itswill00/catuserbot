@@ -1,71 +1,71 @@
 # 🐾 CatUserbot (Modern 2026 Edition)
 
-**CatUserbot** adalah Telegram Userbot berbasis [Telethon](https://github.com/LonamiWebs/Telethon) yang telah dimodernisasi untuk efisiensi tinggi, stabilitas maksimal, dan kemudahan setup. Versi ini telah dioptimalkan sepenuhnya untuk berjalan tanpa ketergantungan database eksternal.
+**CatUserbot** is a Telegram Userbot based on [Telethon](https://github.com/LonamiWebs/Telethon) that has been modernized for high efficiency, maximum stability, and easy setup. This version is fully optimized to run without external database dependencies.
 
 ![catuserbot logo](https://graph.org/file/4860c8e1a5a56d0616b79.png)
 
 ---
 
-## 🚀 Fitur Unggulan (Modern & Efficient)
+## 🚀 Key Features (Modern & Efficient)
 
-- 📦 **100% Local JSON DB:** Tidak butuh PostgreSQL, Redis, atau SQL lainnya. Semua data (GBAN, Filter, Sudo, dll) tersimpan aman di lokal dalam format JSON yang ringan.
-- ⚡ **Parallel Plugin Loading:** Bot menyala jauh lebih cepat berkat sistem pemuatan plugin secara konkuren menggunakan `asyncio.gather`.
-- 🛠️ **Interactive Terminal Setup:** Pertama kali menjalankan bot? Bot akan memandu Anda melakukan konfigurasi langsung di terminal (Auto-generate `.env`).
-- 🐳 **Docker Optimized:** Image Docker yang lebih ringan berbasis Python 3.11-slim, siap dideploy di mana saja.
-- 🧠 **AI Ready:** Arsitektur core telah disiapkan untuk integrasi AI (OpenAI/Gemini) secara native.
-- 🛡️ **Smart Error Handling:** Pelaporan error yang lebih cerdas dengan traceback otomatis yang dikirim ke grup log pribadi Anda.
+- 📦 **100% Local JSON DB:** No need for PostgreSQL, Redis, or other SQL databases. All data (GBAN, Filters, Sudo, etc.) is safely stored locally in a lightweight JSON format.
+- ⚡ **Parallel Plugin Loading:** The bot starts significantly faster thanks to concurrent plugin loading using `asyncio.gather`.
+- 🛠️ **Interactive Terminal Setup:** Running the bot for the first time? It will guide you through configuration directly in the terminal (Auto-generates `.env`).
+- 🐳 **Docker Optimized:** Lightweight Docker image based on Python 3.11-slim, ready to deploy anywhere.
+- 🧠 **AI Ready:** Core architecture is prepared for native AI integration (OpenAI/Gemini).
+- 🛡️ **Smart Error Handling:** Smarter error reporting with automatic tracebacks sent to your private log group.
 
 ---
 
-## 🛠️ Cara Install & Setup
+## 🛠️ Installation & Setup
 
-### ⚡ Jalankan Secara Lokal (Cara Tercepat)
+### ⚡ Run Locally (Fastest Way)
 
-1. **Clone Repositori:**
+1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/catuserbot.git
+   git clone https://github.com/itswill00/catuserbot.git
    cd catuserbot
    ```
 
-2. **Instal Dependensi:**
+2. **Install Dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Jalankan Bot:**
+3. **Run the Bot:**
    ```bash
    python3 -m userbot
    ```
-   *Jika Anda belum memiliki file konfigurasi, bot akan otomatis masuk ke **Mode Setup Interaktif** di terminal Anda.*
+   *If you don't have a configuration file yet, the bot will automatically enter **Interactive Setup Mode** in your terminal.*
 
 ---
 
-### 🐳 Menggunakan Docker
+### 🐳 Using Docker
 
-1. **Build Image:**
+1. **Build the Image:**
    ```bash
    docker build -t catuserbot .
    ```
 
-2. **Jalankan Container:**
+2. **Run the Container:**
    ```bash
    docker run -it --env-file .env catuserbot
    ```
 
 ---
 
-## 📂 Struktur Data (Local DB)
+## 📂 Data Structure (Local DB)
 
-Karena kita menggunakan **Local JSON DB**, seluruh data Anda tersimpan di direktori:
+Since we are using **Local JSON DB**, all your data is stored in:
 `userbot/cache/*.json`
 
-*Pastikan Anda melakukan backup folder `userbot/cache/` jika ingin memindahkan bot ke server lain agar data filter, blacklist, dan sudo Anda tidak hilang.*
+*Make sure to backup the `userbot/cache/` folder if you want to move the bot to another server so your filters, blacklists, and sudo data are not lost.*
 
 ---
 
-## 🤝 Dukungan & Komunitas
+## 🤝 Support & Community
 
-Jika Anda menemukan bug atau membutuhkan bantuan, silakan hubungi kami di:
+If you find a bug or need help, please contact us at:
 - 📢 **Channel:** [@catuserbot17](https://t.me/catuserbot17)
 - 👥 **Group Support:** [@catuserbot_support](https://t.me/catuserbot_support)
 
@@ -74,19 +74,19 @@ Jika Anda menemukan bug atau membutuhkan bantuan, silakan hubungi kami di:
 ## ⚠️ Disclaimer
 
 ```text
-              PENTING: RISIKO BANNED
-Akun Telegram Anda mungkin terkena banned jika menyalahgunakan bot ini (Spamming/Flooding).
-Kami (Pengembang) tidak bertanggung jawab atas segala risiko pada akun Anda.
-Gunakan bot ini dengan bijak untuk tujuan produktivitas dan kesenangan.
+              IMPORTANT: BANNED RISK
+Your Telegram account may get banned if you misuse this bot (Spamming/Flooding).
+We (the developers) are not responsible for any risks to your account.
+Use this bot wisely for productivity and fun purposes.
 ```
 
 ---
 
 ## ❤️ Credits & Inspiration
 
-- [Telethon](https://github.com/LonamiWebs/Telethon/) oleh LonamiWebs.
-- [CatUserBot Original Team](https://github.com/TgCatUB/catuserbot) untuk fondasi awalnya.
-- Seluruh kontributor dan komunitas Userbot Telegram.
+- [Telethon](https://github.com/LonamiWebs/Telethon/) by LonamiWebs.
+- [CatUserBot Original Team](https://github.com/TgCatUB/catuserbot) for the original foundation.
+- All contributors and the Telegram Userbot community.
 
 ---
 **Made with ❤️ and high-performance code.**

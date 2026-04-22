@@ -10,13 +10,13 @@
 from .json_db import global_db as gdb
 
 def gvarstatus(variable):
-    """Mendapatkan nilai variabel dari database JSON."""
+    """Get global variable value from JSON database."""
     return gdb.get(str(variable))
 
 def addgvar(variable, value):
-    """Menambah atau memperbarui variabel di database JSON."""
+    """Add or update global variable in JSON database."""
     gdb.set(str(variable), value)
 
 def delgvar(variable):
-    """Menghapus variabel dari database JSON."""
+    """Delete global variable from JSON database."""
     gdb.delete(str(variable))

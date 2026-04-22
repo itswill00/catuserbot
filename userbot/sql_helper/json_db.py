@@ -34,7 +34,7 @@ class JsonDB:
                 return {}
 
     def _save_to_disk(self, data):
-        # Atomic write: tulis ke file .tmp lalu rename
+        # Atomic write: write to .tmp then rename
         temp_path = self.path.with_suffix(".tmp")
         with open(temp_path, "w") as f:
             ujson.dump(data, f, indent=4)

@@ -11,8 +11,8 @@ from ..core.logger import logging
 
 LOGS = logging.getLogger(__name__)
 
-# Kita sekarang menggunakan Local JSON DB. 
-# SQLAlchemy SESSION & BASE dinonaktifkan untuk menghemat resource.
+# We are now using Local JSON DB.
+# SQLAlchemy SESSION & BASE are disabled to save resources.
 BASE = None
 SESSION = None
 
