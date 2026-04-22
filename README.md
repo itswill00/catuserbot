@@ -1,23 +1,40 @@
-# CatUserbot
+# 🐱 CatUserbot
 
-**CatUserbot** is a Telegram Userbot based on [Telethon](https://github.com/LonamiWebs/Telethon). This version is optimized to run with a local JSON database and simplified setup process.
+<p align="center">
+    <img src="https://graph.org/file/4860c8e1a5a56d0616b79.png" width="200" alt="CatUserbot Logo">
+</p>
 
-![catuserbot logo](https://graph.org/file/4860c8e1a5a56d0616b79.png)
-
----
-
-## Features
-
-- **Local JSON DB:** Uses a lightweight JSON database for all storage (GBAN, Filters, Sudo, etc.), eliminating the need for external SQL databases.
-- **Improved Performance:** Faster plugin loading using concurrent execution.
-- **Interactive Setup:** Guided configuration directly in the terminal for first-time users.
-- **Docker Support:** Optimized Dockerfile using Python 3.11-slim.
+<p align="center">
+    <a href="https://github.com/itswill00/catuserbot/stargazers"><img src="https://img.shields.io/github/stars/itswill00/catuserbot?style=for-the-badge&color=blue" alt="Stars"></a>
+    <a href="https://github.com/itswill00/catuserbot/network/members"><img src="https://img.shields.io/github/forks/itswill00/catuserbot?style=for-the-badge&color=red" alt="Forks"></a>
+    <a href="https://github.com/itswill00/catuserbot/blob/master/LICENSE"><img src="https://img.shields.io/github/license/itswill00/catuserbot?style=for-the-badge&color=green" alt="License"></a>
+    <a href="https://t.me/catuserbot_support"><img src="https://img.shields.io/badge/Telegram-Support-blue?style=for-the-badge&logo=telegram" alt="Support"></a>
+</p>
 
 ---
 
-## Installation & Setup
+**CatUserbot** is a powerful, highly customizable, and optimized Telegram Userbot based on [Telethon](https://github.com/LonamiWebs/Telethon). Designed for stability, speed, and ease of use.
 
-### Local Setup
+## 🚀 Key Features
+
+- ⚡ **Lightning Fast:** Optimized plugin loading and concurrent execution.
+- 📂 **Local JSON Database:** No more complex SQL setups. Lightweight and portable.
+- 🛠️ **100+ Plugins:** From admin tools to fun games and media converters.
+- 🛡️ **Stable & Secure:** Built-in error handling and security checks.
+- 🐳 **Docker Ready:** Deploy anywhere with ease.
+- 🤖 **Assistant Bot:** Includes a helper bot for PM management and more.
+
+## 🛠️ Recent Stability Fixes (v3.3.1+)
+
+We've recently overhauled the core for maximum reliability:
+- ✅ **Async Initialization:** Fixed core event loop and startup conflicts.
+- ✅ **Data Safety:** Prevented accidental plugin deletion on import errors.
+- ✅ **Robust Config:** Added intelligent validation for environment variables.
+- ✅ **Improved Logging:** More descriptive error reports for easier debugging.
+
+## 📦 Quick Installation
+
+### 🖥️ Local Deployment
 
 1. **Clone the Repository:**
    ```bash
@@ -30,53 +47,47 @@
    pip install -r requirements.txt
    ```
 
-3. **Run the Bot:**
+3. **Configure:**
+   - Copy `sample_config.py` to `config.py` and fill in your details.
+   - Or simply run the bot and follow the interactive setup.
+
+4. **Run:**
    ```bash
    python3 -m userbot
    ```
-   *Follow the interactive prompts in the terminal to configure your bot.*
 
----
+### 🐳 Docker Deployment
 
-### Docker Setup
-
-1. **Build the Image:**
-   ```bash
-   docker build -t catuserbot .
-   ```
-
-2. **Run the Container:**
-   ```bash
-   docker run -it --env-file .env catuserbot
-   ```
-
----
-
-## Data Management
-
-All persistent data is stored in the following directory:
-`userbot/cache/*.json`
-
----
-
-## Support
-
-- **Channel:** [@catuserbot17](https://t.me/catuserbot17)
-- **Group:** [@catuserbot_support](https://t.me/catuserbot_support)
-
----
-
-## Disclaimer
-
-```text
-Your Telegram account may get banned if you misuse this bot.
-Developers are not responsible for any risks to your account.
-Use this bot wisely.
+```bash
+docker build -t catuserbot .
+docker run -it --env-file .env catuserbot
 ```
 
----
+## ⚙️ Configuration Variables
 
-## Credits
+| Variable | Description |
+|----------|-------------|
+| `APP_ID` | Your API ID from my.telegram.org |
+| `API_HASH` | Your API Hash from my.telegram.org |
+| `STRING_SESSION` | Telethon Session String |
+| `TG_BOT_TOKEN` | Token from @BotFather for the Assistant Bot |
+| `PRIVATE_GROUP_BOT_API_ID` | Group ID for Bot Logs |
+
+> For a full list of variables, check [docs/installation/variables/](docs/installation/variables/).
+
+## 🤝 Support & Community
+
+- 📢 **Channel:** [@catuserbot17](https://t.me/catuserbot17)
+- 💬 **Support Group:** [@catuserbot_support](https://t.me/catuserbot_support)
+
+## 📜 Disclaimer
+
+> **Your Telegram account may get banned if you misuse this bot.**
+> The developers are not responsible for any risks to your account.
+> Use this bot wisely and at your own risk.
+
+## ❤️ Credits
 
 - [Telethon](https://github.com/LonamiWebs/Telethon/) by LonamiWebs.
 - [CatUserBot Original Team](https://github.com/TgCatUB/catuserbot).
+- Improved and Maintained by [itswill00](https://github.com/itswill00).
