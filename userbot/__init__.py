@@ -12,6 +12,15 @@ import sys
 import time
 
 import heroku3
+import typing
+
+# Polyfill for Python < 3.11 (Self is required by lyricsgenius)
+if sys.version_info < (3, 11):
+    try:
+        from typing_extensions import Self
+    except ImportError:
+        Self = typing.Any
+    typing.Self = Self
 
 from .Config import Config
 from .core.logger import logging

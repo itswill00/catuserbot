@@ -55,6 +55,7 @@ wand
 wget
 yt-dlp
 python-dotenv
+typing-extensions
 
 git+https://github.com/Jisan09/search-engine-parser
 git+https://github.com/Jisan09/Telethon@test
