@@ -214,7 +214,7 @@ async def vcplayer_article(event):
         text = "** | VC Menu | **"
         buttons = buttons[0]
         if play := vc_player.PLAYING:
-            vcimg = play["img"]
+            media_img = play["img"]
             text = f"**🎧 Playing:** [{play['title']}]({play['url']})\n"
             text += f"**⏳ Duration:** `{play['duration']}`\n"
             text += f"**💭 Chat:** `{vc_player.CHAT_NAME}`"
@@ -223,7 +223,7 @@ async def vcplayer_article(event):
         return await build_article(
             event,
             title="CatVc Player",
-            media=vcimg,
+            media=media_img,
             text=text,
             description="Manange Vc Stream.",
             buttons=buttons,
@@ -662,7 +662,7 @@ async def inline_popup_info(event, builder):
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"close")))
 @check_owner
-async def on_plug_in_callback_query_handler(event):
+async def close_menu_handler(event):
     buttons = [
         (Button.inline("Open Menu", data="mainmenu"),),
     ]
@@ -682,7 +682,7 @@ async def on_plugin_callback_query_handler(event):
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"(.*)_menu")))
 @check_owner
-async def on_plug_in_callback_query_handler(event):
+async def category_menu_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
     buttons = paginate_help(0, GRP_INFO[category], category)
     text = f"**Category: **{category}\

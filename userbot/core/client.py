@@ -42,7 +42,7 @@ from .data import (
     blacklist_chats_list,
     sudo_enabled_cmds,
 )
-from .events import *
+from .events import MessageEdited, NewMessage, edit_message, send_file, send_message
 from .fasttelethon import download_file, upload_file
 from .logger import logging
 from .managers import edit_delete

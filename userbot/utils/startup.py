@@ -1,11 +1,11 @@
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CatUserBot ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 # Copyright (C) 2020-2023 by TgCatUB@Github.
 
 # This file is part of: https://github.com/TgCatUB/catuserbot
 # and is released under the "GNU v3.0 License Agreement".
 
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 import glob
 import os
@@ -234,7 +234,8 @@ async def verifyLoggerGroup():
                     and entity.default_banned_rights.invite_users
                 ) or not entity.admin_rights.invite_users:
                     LOGS.info(
-                        "Permissions missing to addusers for the specified PRIVATE_GROUP_BOT_API_ID."
+                        "Permissions missing to addusers for "
+                        "the specified PRIVATE_GROUP_BOT_API_ID."
                     )
         except ValueError:
             LOGS.error(
@@ -244,19 +245,22 @@ async def verifyLoggerGroup():
             LOGS.error(
                 "PRIVATE_GROUP_BOT_API_ID is unsupported. Make sure it's correct."
             )
-        except Exception as e:
-            LOGS.error(
-                "An Exception occured upon trying to verify the PRIVATE_GROUP_BOT_API_ID.\n"
-                + str(e)
-            )
+        LOGS.info(
+            "Permissions missing to invite users for "
+            "the specified PRIVATE_GROUP_BOT_API_ID."
+        )
     else:
-        descript = "Don't delete this group or change to group(If you change group all your previous snips, welcome will be lost.)"
+        descript = (
+            "Don't delete this group or change to group (If you change group "
+            "all your previous snips, welcome will be lost.)"
+        )
         _, groupid = await create_supergroup(
             "CatUserbot BotLog Group", catub, Config.TG_BOT_USERNAME, descript
         )
         addgvar("PRIVATE_GROUP_BOT_API_ID", groupid)
         LOGS.info(
-            "Private Group for PRIVATE_GROUP_BOT_API_ID is created successfully and added to vars."
+            "Private Group for PRIVATE_GROUP_BOT_API_ID is "
+            "created successfully and added to vars."
         )
         flag = True
     if PM_LOGGER_GROUP_ID != -100:
@@ -299,7 +303,11 @@ async def install_externalrepo(repo, branch, cfolder):
     if CATBRANCH := branch:
         repourl = os.path.join(CATREPO, f"tree/{CATBRANCH}")
         gcmd = f"git clone -b {CATBRANCH} {CATREPO} {cfolder}"
-        errtext = f"There is no branch with name `{CATBRANCH}` in your external repo {CATREPO}. Recheck branch name and correct it in vars(`EXTERNAL_REPO_BRANCH`)"
+        errtext = (
+            f"There is no branch with name `{CATBRANCH}` in your external repo "
+            f"{CATREPO}. Recheck branch name and correct it in vars"
+            f"(`EXTERNAL_REPO_BRANCH`)"
+        )
     else:
         repourl = CATREPO
         gcmd = f"git clone {CATREPO} {cfolder}"
