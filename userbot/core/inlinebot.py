@@ -209,7 +209,7 @@ async def age_verification_article(event):
 async def vcplayer_article(event):
     try:
         from catvc.helper.function import vc_player
-        from catvc.helper.inlinevc import buttons, vcimg
+        from catvc.helper.inlinevc import buttons
 
         text = "** | VC Menu | **"
         buttons = buttons[0]

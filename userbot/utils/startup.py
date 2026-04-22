@@ -311,7 +311,10 @@ async def install_externalrepo(repo, branch, cfolder):
     else:
         repourl = CATREPO
         gcmd = f"git clone {CATREPO} {cfolder}"
-        errtext = f"The link({CATREPO}) you provided for `EXTERNAL_REPO` in vars is invalid. please recheck that link"
+        errtext = (
+            f"The link({CATREPO}) you provided for `EXTERNAL_REPO` "
+            "in vars is invalid. please recheck that link"
+        )
     response = urllib.request.urlopen(repourl)
     if response.code != 200:
         LOGS.error(errtext)
@@ -319,11 +322,13 @@ async def install_externalrepo(repo, branch, cfolder):
     await runcmd(gcmd)
     if not os.path.exists(cfolder):
         LOGS.error(
-            "There was a problem in cloning the external repo. please recheck external repo link"
+            "There was a problem in cloning the external repo. "
+            "please recheck external repo link"
         )
         return await catub.tgbot.send_message(
             BOTLOG_CHATID,
-            "There was a problem in cloning the external repo. please recheck external repo link",
+            "There was a problem in cloning the external repo. "
+            "please recheck external repo link",
         )
     if os.path.exists(rpath):
         await runcmd(f"pip3 install --no-cache-dir -r {rpath}")
