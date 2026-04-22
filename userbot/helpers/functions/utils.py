@@ -11,7 +11,7 @@ import re
 import time
 from datetime import datetime
 
-from emoji import get_emoji_regexp
+import emoji
 from telethon.tl.types import Channel, PollAnswer
 
 
@@ -112,5 +112,5 @@ def deEmojify(inputString: str) -> str:
 
 
 def soft_deEmojify(inputString: str) -> str:
-    """Remove emojis and other non-safe characters from string"""
-    return get_emoji_regexp().sub("", inputString)
+    """Remove emojis and other non-safe characters from string using standard library."""
+    return emoji.replace_emoji(inputString, replace="")
