@@ -38,21 +38,17 @@ def main():
     env_api_hash = os.environ.get("API_HASH")
 
     if env_app_id and env_api_hash:
-        print(f"\n[!] Found existing APP_ID in .env: {env_app_id}")
-        use_env = input("Use APP_ID & API_HASH from .env? (y/n): ").lower()
-        if use_env == 'y':
+        print(f"\n[*] Using APP_ID & API_HASH from .env file.")
+        try:
             APP_ID = int(env_app_id)
             API_HASH = env_api_hash
-        else:
-            try:
-                APP_ID = int(input("\nEnter APP ID: "))
-                API_HASH = input("Enter API HASH: ")
-            except ValueError:
-                print("\n[Error] APP ID must be a number!")
-                return
+        except ValueError:
+            print("\n[Error] Invalid APP_ID in .env file! Must be a number.")
+            return
     else:
         try:
-            APP_ID = int(input("\nEnter APP ID: "))
+            print("\n[!] No credentials found in .env. Please enter manually.")
+            APP_ID = int(input("Enter APP ID: "))
             API_HASH = input("Enter API HASH: ")
         except ValueError:
             print("\n[Error] APP ID must be a number!")
