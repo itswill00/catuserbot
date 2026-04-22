@@ -8,143 +8,59 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import threading
+from .json_db import JsonDB
 
-from sqlalchemy import Column, PickleType, UnicodeText, distinct, func
+# Use JSON DB instead of SQL
+gcoldb = JsonDB("cat_collections")
+CAT_GLOBALCOLLECTION = threading.RLock()
 
-from . import BASE, SESSION
-
-
-class Cat_GlobalCollection(BASE):
-    __tablename__ = "cat_globalcollection"
-    keywoard = Column(UnicodeText, primary_key=True)
-    contents = Column(PickleType, primary_key=True, nullable=False)
-
+# Dummy class for compatibility if needed, but we store data as dicts
+class Cat_GlobalCollection:
     def __init__(self, keywoard, contents):
         self.keywoard = keywoard
         self.contents = tuple(contents)
 
-    def __repr__(self):
-        return f"<Cat Global Collection lists '{self.contents}' for {self.keywoard}>"
-
-    def __eq__(self, other):
-        return (
-            isinstance(other, Cat_GlobalCollection)
-            and self.keywoard == other.keywoard
-            and self.contents == other.contents
-        )
-
-
-Cat_GlobalCollection.__table__.create(checkfirst=True)
-
-CAT_GLOBALCOLLECTION = threading.RLock()
-
-
-class COLLECTION_SQL:
-    def __init__(self):
-        self.CONTENTS_LIST = {}
-
-
-COLLECTION_SQL_ = COLLECTION_SQL()
-
-
 def add_to_collectionlist(keywoard, contents):
     with CAT_GLOBALCOLLECTION:
-        keyword_items = Cat_GlobalCollection(keywoard, tuple(contents))
-
-        SESSION.merge(keyword_items)
-        SESSION.commit()
-        COLLECTION_SQL_.CONTENTS_LIST.setdefault(keywoard, set()).add(tuple(contents))
-
+        data = gcoldb.get(str(keywoard), [])
+        item = list(contents)
+        if item not in data:
+            data.append(item)
+            gcoldb.set(str(keywoard), data)
 
 def rm_from_collectionlist(keywoard, contents):
     with CAT_GLOBALCOLLECTION:
-        if keyword_items := SESSION.query(Cat_GlobalCollection).get(
-            (keywoard, tuple(contents))
-        ):
-            if tuple(contents) in COLLECTION_SQL_.CONTENTS_LIST.get(keywoard, set()):
-                COLLECTION_SQL_.CONTENTS_LIST.get(keywoard, set()).remove(
-                    tuple(contents)
-                )
-            SESSION.delete(keyword_items)
-            SESSION.commit()
+        data = gcoldb.get(str(keywoard), [])
+        item = list(contents)
+        if item in data:
+            data.remove(item)
+            gcoldb.set(str(keywoard), data)
             return True
-
-        SESSION.close()
         return False
-
 
 def is_in_collectionlist(keywoard, contents):
     with CAT_GLOBALCOLLECTION:
-        keyword_items = COLLECTION_SQL_.CONTENTS_LIST.get(keywoard, set())
-        return any(tuple(contents) == list1 for list1 in keyword_items)
-
+        data = gcoldb.get(str(keywoard), [])
+        return list(contents) in data
 
 def del_keyword_collectionlist(keywoard):
     with CAT_GLOBALCOLLECTION:
-        keyword_items = (
-            SESSION.query(Cat_GlobalCollection.keywoard)
-            .filter(Cat_GlobalCollection.keywoard == keywoard)
-            .delete()
-        )
-        COLLECTION_SQL_.CONTENTS_LIST.pop(keywoard)
-        SESSION.commit()
-
+        gcoldb.delete(str(keywoard))
 
 def get_item_collectionlist(keywoard):
-    return COLLECTION_SQL_.CONTENTS_LIST.get(keywoard, set())
-
+    return set(tuple(x) for x in gcoldb.get(str(keywoard), []))
 
 def get_collectionlist_items():
-    try:
-        chats = SESSION.query(Cat_GlobalCollection.keywoard).distinct().all()
-        return [i[0] for i in chats]
-    finally:
-        SESSION.close()
-
+    return list(gcoldb.get_all().keys())
 
 def num_collectionlist():
-    try:
-        return SESSION.query(Cat_GlobalCollection).count()
-    finally:
-        SESSION.close()
-
+    total = 0
+    for v in gcoldb.get_all().values():
+        total += len(v)
+    return total
 
 def num_collectionlist_item(keywoard):
-    try:
-        return (
-            SESSION.query(Cat_GlobalCollection.keywoard)
-            .filter(Cat_GlobalCollection.keywoard == keywoard)
-            .count()
-        )
-    finally:
-        SESSION.close()
-
+    return len(gcoldb.get(str(keywoard), []))
 
 def num_collectionlist_items():
-    try:
-        return SESSION.query(
-            func.count(distinct(Cat_GlobalCollection.keywoard))
-        ).scalar()
-    finally:
-        SESSION.close()
-
-
-def __load_item_collectionlists():
-    try:
-        chats = SESSION.query(Cat_GlobalCollection.keywoard).distinct().all()
-        for (keywoard,) in chats:
-            COLLECTION_SQL_.CONTENTS_LIST[keywoard] = []
-
-        all_groups = SESSION.query(Cat_GlobalCollection).all()
-        for x in all_groups:
-            COLLECTION_SQL_.CONTENTS_LIST[x.keywoard] += [x.contents]
-
-        COLLECTION_SQL_.CONTENTS_LIST = {
-            x: set(y) for x, y in COLLECTION_SQL_.CONTENTS_LIST.items()
-        }
-
-    finally:
-        SESSION.close()
-
-
-__load_item_collectionlists()
+    return len(gcoldb.get_all())
