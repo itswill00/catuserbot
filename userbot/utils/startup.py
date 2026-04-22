@@ -192,16 +192,18 @@ async def load_plugins(folder, extfolder=None):
                         LOGS.warning(
                             f"Could not remove disabled plugin {shortname}: {rm_err}"
                         )
-            except Exception as e:
-                # IMPORTANT: Do NOT delete plugin files on errors
-                # Plugin may fail to load due to temporary issues (missing dependencies, etc)
-                if shortname not in failure:
-                    failure.append(shortname)
-                LOGS.warning(
-                    f"unable to load {shortname} because of error {e}\n"
-                    f"Base Folder {plugin_path}\n"
-                    f"Plugin file kept for recovery. Check the error above."
-                )
+                except Exception as e:
+                    # IMPORTANT: Do NOT delete plugin files on errors
+                    # Plugin may fail to load due to temporary issues (missing dependencies, etc)
+                    if shortname not in failure:
+                        failure.append(shortname)
+                    LOGS.error(
+                        f"❌ **Plugin Load Failure**\n\n"
+                        f"**Plugin:** `{shortname}`\n"
+                        f"**Path:** `{plugin_path}`\n"
+                        f"**Error:** `{e}`\n"
+                        f"**Action:** Check dependencies or syntax in the plugin file."
+                    )
     if extfolder:
         if not failure:
             failure.append("None")

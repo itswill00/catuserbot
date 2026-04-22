@@ -71,7 +71,7 @@ async def startup_process():
         await add_bot_to_logger_group(PM_LOGGER_GROUP_ID)
     
     await startupmessage()
-    LOGS.info(f"CatUserbot v{userbot.__version__} is now Online! [Chat ID: {BOTLOG_CHATID}]")
+    LOGS.warning(f"✅ CatUserbot v{userbot.__version__} is now Online! [Chat ID: {BOTLOG_CHATID}]")
     return
 
 

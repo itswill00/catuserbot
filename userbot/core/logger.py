@@ -83,7 +83,7 @@ class TelegramLogHandler(logging.Handler):
 
 # Global handler instance
 tg_handler = TelegramLogHandler()
-tg_handler.setLevel(logging.INFO) # Allow info from userbot
+tg_handler.setLevel(logging.WARNING) # ONLY send Warnings and Errors to Telegram
 
 # Base Logging to File and Console ONLY
 logging.basicConfig(
