@@ -81,15 +81,18 @@ if [ ! -f ".env" ]; then
     else
         echo -e "${RED}[!] .env.sample not found. Creating a basic .env template...${NC}"
         cat > .env << EOF
+# CatUserbot Modern Config
 APP_ID=
 API_HASH=
 STRING_SESSION=
 TG_BOT_TOKEN=
+OWNER_ID=
+PRIVATE_GROUP_BOT_API_ID=
 EOF
     fi
     echo -e "\n${YELLOW}NEXT STEPS:${NC}"
-    echo -e "1. Edit the ${CYAN}.env${NC} file and fill in your details (APP_ID, API_HASH, etc.)"
-    echo -e "2. Run ${CYAN}python3 stringsetup.py${NC} to generate your STRING_SESSION"
+    echo -e "1. Edit the ${CYAN}.env${NC} file and fill in your details (APP_ID, API_HASH, OWNER_ID, etc.)"
+    echo -e "2. Run ${CYAN}python3 stringsetup.py${NC} if you don't have a STRING_SESSION yet."
     echo -e "3. Start the bot with ${CYAN}python3 -m userbot${NC}"
 else
     echo -e "${GREEN}[+] .env configuration detected.${NC}"
@@ -101,10 +104,9 @@ echo -e "===================================================="
 echo -e "${YELLOW}FOLLOW THESE STEPS IN ORDER:${NC}"
 echo -e ""
 echo -e "${GREEN}STEP 1:${NC} Open the ${CYAN}.env${NC} file and fill in your details."
-echo -e "        ${YELLOW}(APP_ID, API_HASH, and TG_BOT_TOKEN)${NC}"
+echo -e "        ${YELLOW}(APP_ID, API_HASH, OWNER_ID, and PRIVATE_GROUP_BOT_API_ID)${NC}"
 echo -e ""
-echo -e "${GREEN}STEP 2:${NC} Run ${CYAN}python3 stringsetup.py${NC}"
-echo -e "        ${YELLOW}(To generate your STRING_SESSION)${NC}"
+echo -e "${GREEN}STEP 2:${NC} Run ${CYAN}python3 stringsetup.py${NC} (if session is empty)"
 echo -e ""
 echo -e "${GREEN}STEP 3:${NC} Start your CatUserbot:"
 echo -e "        ${CYAN}python3 -m userbot${NC}"

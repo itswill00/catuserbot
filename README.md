@@ -15,21 +15,21 @@
 
 **CatUserbot** is a powerful, highly customizable, and optimized Telegram Userbot based on [Telethon](https://github.com/LonamiWebs/Telethon). Designed for stability, speed, and ease of use.
 
-## 🚀 Key Features
-
+- 📡 **Native Centralized Logging:** Professional error reporting sent directly to your Telegram channel.
+- 💤 **Persistent AFK:** Your Away-From-Keyboard status survives bot restarts and updates.
+- 📋 **Dynamic Help System:** Command list and categories are always synced and up-to-date.
 - ⚡ **Lightning Fast:** Optimized plugin loading and concurrent execution.
 - 📂 **Local JSON Database:** No more complex SQL setups. Lightweight and portable.
 - 🛠️ **100+ Plugins:** From admin tools to fun games and media converters.
-- 🛡️ **Stable & Secure:** Built-in error handling and security checks.
-- 🐳 **Docker Ready:** Deploy anywhere with ease.
 - 🤖 **Assistant Bot:** Includes a helper bot for PM management and more.
 
 ## 🛠️ Recent Modernization (2026)
 
-The bot has been fully modernized for low-friction deployment:
+The bot has been fully modernized for high-performance VPS deployment:
+- ✅ **Native Observability:** Centralized logging via `PRIVATE_GROUP_BOT_API_ID`.
+- ✅ **Persistent States:** AFK and other critical states are now stored in JSON DB.
 - ✅ **Zero-Config DB:** Fully powered by Local JSON Database.
-- ✅ **No Heroku Bloat:** Completely decoupled from Heroku for better VPS performance.
-- ✅ **Smart Setup:** Automated environment generation and session setup.
+- ✅ **Clean Startup:** Graceful handling of interruptions and detailed load reports.
 
 ## 📦 Quick Installation (VPS/Local)
 
@@ -44,7 +44,7 @@ bash setup.sh
 *This will install dependencies and automatically create your `.env` file.*
 
 ### **Step 2: Configure & Generate Session**
-1. Open the `.env` file and fill in your `APP_ID`, `API_HASH`, and `TG_BOT_TOKEN`.
+1. Open the `.env` file and fill in your `APP_ID`, `API_HASH`, `OWNER_ID`, and `PRIVATE_GROUP_BOT_API_ID`.
 2. Run the smart session generator:
    ```bash
    python3 stringsetup.py
@@ -72,6 +72,8 @@ docker-compose up -d
 | `APP_ID` | Your API ID from my.telegram.org |
 | `API_HASH` | Your API Hash from my.telegram.org |
 | `STRING_SESSION` | Telethon Session String |
+| `OWNER_ID` | Your Telegram User ID (for logs & sudo) |
+| `PRIVATE_GROUP_BOT_API_ID` | Your Log Channel/Group ID (e.g. -100xxx) |
 | `TG_BOT_TOKEN` | Token from @BotFather for the Assistant Bot |
 
 > For a full list of variables, check [docs/installation/variables/](docs/installation/variables/).
