@@ -24,46 +24,48 @@
 - 🐳 **Docker Ready:** Deploy anywhere with ease.
 - 🤖 **Assistant Bot:** Includes a helper bot for PM management and more.
 
-## 🛠️ Recent Stability Fixes (v3.3.1+)
+## 🛠️ Recent Modernization (2026)
 
-We've recently overhauled the core for maximum reliability:
-- ✅ **Async Initialization:** Fixed core event loop and startup conflicts.
-- ✅ **Data Safety:** Prevented accidental plugin deletion on import errors.
-- ✅ **Robust Config:** Added intelligent validation for environment variables.
-- ✅ **Improved Logging:** More descriptive error reports for easier debugging.
+The bot has been fully modernized for low-friction deployment:
+- ✅ **Zero-Config DB:** Fully powered by Local JSON Database.
+- ✅ **No Heroku Bloat:** Completely decoupled from Heroku for better VPS performance.
+- ✅ **Smart Setup:** Automated environment generation and session setup.
 
-## 📦 Quick Installation
+## 📦 Quick Installation (VPS/Local)
 
-### 🖥️ Local Deployment
+The setup is now a simple 3-step process:
 
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/itswill00/catuserbot.git
-   cd catuserbot
-   ```
-
-2. **Install Dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Configure:**
-   - Copy `sample_config.py` to `config.py` and fill in your details.
-   - Or simply run the bot and follow the interactive setup.
-
-4. **Run:**
-   ```bash
-   python3 -m userbot
-   ```
-
-### 🐳 Docker Deployment
-
+### **Step 1: Run Automatic Setup**
 ```bash
-docker build -t catuserbot .
-docker run -it --env-file .env catuserbot
+git clone https://github.com/itswill00/catuserbot.git
+cd catuserbot
+bash setup.sh
+```
+*This will install dependencies and automatically create your `.env` file.*
+
+### **Step 2: Configure & Generate Session**
+1. Open the `.env` file and fill in your `APP_ID`, `API_HASH`, and `TG_BOT_TOKEN`.
+2. Run the smart session generator:
+   ```bash
+   python3 stringsetup.py
+   ```
+3. Copy the generated string and paste it into the `STRING_SESSION` field in your `.env`.
+
+### **Step 3: Start the Bot**
+```bash
+python3 -m userbot
 ```
 
-## ⚙️ Configuration Variables
+---
+
+## 🐳 Docker Deployment
+
+```bash
+docker-compose up -d
+```
+*Make sure to fill your `.env` file before running docker.*
+
+## ⚙️ Essential Variables
 
 | Variable | Description |
 |----------|-------------|
@@ -71,7 +73,6 @@ docker run -it --env-file .env catuserbot
 | `API_HASH` | Your API Hash from my.telegram.org |
 | `STRING_SESSION` | Telethon Session String |
 | `TG_BOT_TOKEN` | Token from @BotFather for the Assistant Bot |
-| `PRIVATE_GROUP_BOT_API_ID` | Group ID for Bot Logs |
 
 > For a full list of variables, check [docs/installation/variables/](docs/installation/variables/).
 
