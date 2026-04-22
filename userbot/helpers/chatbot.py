@@ -23,6 +23,18 @@ openai.api_key = Config.OPENAI_API_KEY
 conversations = {}
 
 
+async def ai_api(event):
+    """Helper to get Kuki API key for chatbot"""
+    from ..sql_helper.globals import gvarstatus
+    # Priority: Database (gvar) -> Config -> Default "FREE"
+    key = gvarstatus("KUKI_API")
+    if key:
+        return key
+    if hasattr(Config, "KUKI_API") and Config.KUKI_API:
+        return Config.KUKI_API
+    return "FREE"
+
+
 def generate_gpt_response(input_text, chat_id):
     global conversations
     model = gvarstatus("CHAT_MODEL") or "gpt-3.5-turbo"
