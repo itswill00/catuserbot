@@ -8,9 +8,12 @@ from telethon.tl.types import ChatBannedRights
 from validators.url import url
 
 class ConfigMeta(type):
-    """Metaclass to provide default None for missing Config attributes"""
+    """Metaclass to provide default empty string for missing Config attributes"""
     def __getattr__(cls, name):
-        return None
+        # Return empty list for known collection types to avoid iteration errors
+        if name in ["NO_LOAD", "SUDO_USERS", "BL_CHATS", "SUDO_COMMANDS"]:
+            return []
+        return ""
 
 class Config(metaclass=ConfigMeta):
     # --- CORE BOT SETTINGS ---
@@ -44,8 +47,9 @@ class Config(metaclass=ConfigMeta):
     UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH", "master")
     EXTERNAL_REPO = os.environ.get("EXTERNAL_REPO", None)
     PLUGIN_CHANNEL = int(os.environ.get("PLUGIN_CHANNEL") or 0)
+    NO_LOAD = list(os.environ.get("NO_LOAD", "").split())
     
-    # --- PLUGIN SPECIFIC (Missing in Logs) ---
+    # --- PLUGIN SPECIFIC ---
     FBAN_GROUP_ID = int(os.environ.get("FBAN_GROUP_ID") or 0)
     FINISHED_PROGRESS_STR = os.environ.get("FINISHED_PROGRESS_STR", "█")
     UNFINISHED_PROGRESS_STR = os.environ.get("UNFINISHED_PROGRESS_STR", "░")
