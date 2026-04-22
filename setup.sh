@@ -73,30 +73,33 @@ fi
 
 # 4. Configuration Check (.env)
 echo -e "${YELLOW}[4/4] Verifying Configuration...${NC}"
-if [ ! -f ".env" ] && [ ! -f "config.py" ]; then
-    echo -e "${CYAN}[!] Configuration file not found.${NC}"
-    echo -n "Do you want to create a template .env file now? (y/n): "
-    read create_env
-    if [ "$create_env" == "y" ]; then
+if [ ! -f ".env" ]; then
+    if [ -f ".env.sample" ]; then
+        echo -e "${CYAN}[*] Creating .env from .env.sample template...${NC}"
+        cp .env.sample .env
+        echo -e "${GREEN}[+] .env file created successfully.${NC}"
+    else
+        echo -e "${RED}[!] .env.sample not found. Creating a basic .env template...${NC}"
         cat > .env << EOF
 APP_ID=
 API_HASH=
 STRING_SESSION=
 TG_BOT_TOKEN=
-PRIVATE_GROUP_BOT_API_ID=
-ALIVE_NAME=
+DATABASE_URL=
 EOF
-        echo -e "${GREEN}[+] .env template created. Please fill it before starting!${NC}"
     fi
-    echo -e "${YELLOW}[*] Starting Interactive Setup...${NC}"
-    python3 -m userbot
+    echo -e "\n${YELLOW}NEXT STEPS:${NC}"
+    echo -e "1. Edit the ${CYAN}.env${NC} file and fill in your details (APP_ID, API_HASH, etc.)"
+    echo -e "2. Run ${CYAN}python3 stringsetup.py${NC} to generate your STRING_SESSION"
+    echo -e "3. Start the bot with ${CYAN}python3 -m userbot${NC}"
 else
-    echo -e "${GREEN}[+] Configuration detected.${NC}"
+    echo -e "${GREEN}[+] .env configuration detected.${NC}"
 fi
 
-echo -e "${CYAN}===================================================="
+echo -e "\n${CYAN}===================================================="
 echo -e "      SETUP COMPLETED SUCCESSFULLY!"
 echo -e "===================================================="
-echo -e "${GREEN}To start your bot, use:${NC}"
-echo -e "${CYAN}source venv/bin/activate && python3 -m userbot${NC}"
+echo -e "${GREEN}1. FILL DATA IN .env${NC}"
+echo -e "${GREEN}2. RUN: ${CYAN}python3 stringsetup.py${NC}"
+echo -e "${GREEN}3. START: ${CYAN}python3 -m userbot${NC}"
 echo -e "====================================================${NC}"
