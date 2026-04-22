@@ -53,37 +53,37 @@ def file_check(re=True, me=True, mo=True, it=True, fa=True, sp=True, go=False):
         os.mkdir("./temp/")
     if re and not os.path.exists(regular):
         urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Fonts/Roboto-Regular.ttf",
+            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/fonts/Roboto-Regular.ttf",
             regular,
         )
     if me and not os.path.exists(medium):
         urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Fonts/Roboto-Medium.ttf",
+            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/fonts/Roboto-Medium.ttf",
             medium,
         )
     if mo and not os.path.exists(mono):
         urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Fonts/DroidSansMono.ttf",
+            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/fonts/DroidSansMono.ttf",
             mono,
         )
     if it and not os.path.exists(italic):
         urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Fonts/Roboto-Italic.ttf",
+            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/fonts/Roboto-Italic.ttf",
             italic,
         )
     if fa and not os.path.exists(fallback):
         urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Fonts/Quivira.otf",
+            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/fonts/Quivira.otf",
             fallback,
         )
     if sp and not os.path.exists(special):
         urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
+            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Spotify/ArialUnicodeMS.ttf",
             special,
         )
     if go and not os.path.exists(google):
         urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/GoogleSans-Medium.ttf?raw=true",
+            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Spotify/GoogleSans-Medium.ttf",
             google,
         )
 
