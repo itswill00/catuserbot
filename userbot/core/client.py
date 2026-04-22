@@ -94,7 +94,8 @@ class CatUserBotClient(TelegramClient):
             cmd_name, category = command[0], command[1]
             if category not in BOT_INFO:
                 BOT_INFO.append(category)
-            GRP_INFO.setdefault(category, []).append(file_test)
+            if file_test not in GRP_INFO.get(category, []):
+                GRP_INFO.setdefault(category, []).append(file_test)
             PLG_INFO.setdefault(file_test, []).append(cmd_name)
             if cmd_name not in CMD_INFO:
                 CMD_INFO[cmd_name] = [_format_about(info)]

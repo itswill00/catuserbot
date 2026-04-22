@@ -320,8 +320,7 @@ def paginate_help(
     except (ValueError, TypeError):
         number_of_cols = 2
     HELP_EMOJI = gvarstatus("HELP_EMOJI") or " "
-    helpable_plugins = [p for p in loaded_plugins if not p.startswith("_")]
-    helpable_plugins = sorted(helpable_plugins)
+    helpable_plugins = sorted(list(set(p for p in loaded_plugins if not p.startswith("_"))))
     if len(HELP_EMOJI) == 2:
         if plugins:
             modules = [
@@ -601,91 +600,58 @@ async def hide_toll_secret(event, query, match, match3):
 
 async def inline_popup_info(event, builder):
     results = []
-    alive_menu = await article_builder(event, "ialive")
-    results.append(alive_menu) if alive_menu else None
     help_menu = await help_article(event)
     results.append(help_menu) if help_menu else None
-    spotify_menu = await article_builder(event, "spotify")
-    results.append(spotify_menu) if spotify_menu else None
-    vcplayer_menu = await vcplayer_article(event)
-    results.append(vcplayer_menu) if vcplayer_menu else None
-    file_manager = await filemanager_article(event)
-    results.append(file_manager) if file_manager else None
+    
+    # Quick Action Articles
     results.extend(
         (
             builder.article(
-                title="Hide",
-                description="Send hidden text in chat.\nSyntax: hide",
-                text="__Send hidden message for spoilers/quote prevention.__",
-                thumb=get_thumb("hide.png"),
-                buttons=[
-                    Button.switch_inline(
-                        "Hidden Text",
-                        query="hide Text",
-                        same_peer=True,
-                    )
-                ],
-            ),
-            builder.article(
                 title="Search",
                 description="Search cmds & plugins\nSyntax: s",
-                text="__Get help about a plugin or cmd.\n\nMixture of .help & .s__",
+                text="__Get help about a plugin or cmd.__",
                 thumb=get_thumb("search.jpg"),
                 buttons=[
                     Button.switch_inline("Search Help", query="s al", same_peer=True)
                 ],
             ),
             builder.article(
-                title="Secret",
-                description="Send secret message to your friends.\nSyntax: secret @usename",
-                text="__Send **secret message** which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.__",
+                title="Security Tools",
+                description="Hide, Secret, or Troll messages.",
+                text="__Choose your security tool:__",
                 thumb=get_thumb("secret.png"),
                 buttons=[
-                    (
-                        Button.switch_inline(
-                            "Single",
-                            query="secret @username Text",
-                            same_peer=True,
-                        ),
-                        Button.switch_inline(
-                            "Multiple",
-                            query="secret @username @username2 | Text",
-                            same_peer=True,
-                        ),
-                    )
+                    [
+                        Button.switch_inline("Hide", query="hide Text", same_peer=True),
+                        Button.switch_inline("Secret", query="secret @username Text", same_peer=True),
+                    ],
+                    [
+                        Button.switch_inline("Troll", query="troll @username Text", same_peer=True),
+                    ]
                 ],
             ),
             builder.article(
-                title="Troll",
-                description="Send troll message to your friends.\nSyntax: toll @usename",
-                text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
-                thumb=get_thumb("troll.png"),
-                buttons=[
-                    (
-                        Button.switch_inline(
-                            "Single",
-                            query="troll @username Text",
-                            same_peer=True,
-                        ),
-                        Button.switch_inline(
-                            "Multiple",
-                            query="troll @username @username2 | Text",
-                            same_peer=True,
-                        ),
-                    )
-                ],
-            ),
-            builder.article(
-                title="Youtube Download",
-                description="Download videos/audios from YouTube.\nSyntax: ytdl",
-                text="__Download videos or audios from YouTube with different options of resolutions/quality.__",
+                title="Media Tools",
+                description="Spotify, VC Player, or Youtube Download.",
+                text="__Choose your media tool:__",
                 thumb=get_thumb("youtube.png"),
                 buttons=[
-                    Button.switch_inline(
-                        "Youtube-dl",
-                        query="ytdl perfect",
-                        same_peer=True,
-                    )
+                    [
+                        Button.switch_inline("Spotify", query="spotify", same_peer=True),
+                        Button.switch_inline("VC Player", query="vcplayer", same_peer=True),
+                    ],
+                    [
+                        Button.switch_inline("Youtube-dl", query="ytdl perfect", same_peer=True),
+                    ]
+                ],
+            ),
+            builder.article(
+                title="File Manager",
+                description="Inline file manager\nSyntax: ls",
+                text="__Manage your VPS files inline.__",
+                thumb=get_thumb("filemanager.jpg"),
+                buttons=[
+                    Button.switch_inline("Open FM", query="ls", same_peer=True)
                 ],
             ),
         )
