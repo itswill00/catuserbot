@@ -20,20 +20,8 @@ heroku_api = "https://api.heroku.com"
 # Copyright (C) 2020 @UniBorg
 
 def check_data_base_heal_th():
-    # Check for Local JSON DB
-    from ... import sql_helper
-    if sql_helper.SESSION is None:
-        return True, "Functioning (Local JSON DB)"
-    
-    # Check for SQL DB
-    if not Config.DB_URI:
-        return False, "No Database set"
-
-    try:
-        sql_helper.SESSION.execute("SELECT 1")
-        return True, "Functioning (SQL)"
-    except Exception as e:
-        return False, f"❌ {e}"
+    # CatUserbot now uses Local JSON DB by default
+    return True, "Functioning (Local JSON DB)"
 
 
 async def catalive(StartTime):

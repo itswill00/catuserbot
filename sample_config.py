@@ -26,9 +26,7 @@ class Config(metaclass=ConfigMeta):
     TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", None)
     TG_BOT_USERNAME = os.environ.get("TG_BOT_USERNAME", None)
 
-    # --- DATABASE & PERSISTENCE ---
-    DB_URI = os.environ.get("DATABASE_URL", None)
-    CACHE_PATH = os.environ.get("CACHE_PATH", "./userbot/cache/")
+
 
     # --- LOGGING & PERMIT ---
     PRIVATE_GROUP_BOT_API_ID = int(os.environ.get("PRIVATE_GROUP_BOT_API_ID") or 0)
