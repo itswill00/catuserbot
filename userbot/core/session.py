@@ -8,7 +8,9 @@ from .client import CatUserBotClient
 
 __version__ = "3.3.0"
 
-loop = None
+import asyncio
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 
 if Config.STRING_SESSION:
     session = StringSession(str(Config.STRING_SESSION))

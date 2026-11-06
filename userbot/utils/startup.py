@@ -196,11 +196,9 @@ async def verifyLoggerGroup():
     if BOTLOG:
         await check_send_message_permission(BOTLOG_CHATID, "PRIVATE_GROUP_BOT_API_ID")
     else:
-        descript = "Don't delete this group or change to group(If you change group all your previous snips, welcome will be lost.)"
-        _, groupid = await create_supergroup("CatUserbot BotLog Group", catub, Config.TG_BOT_USERNAME, descript)
-        addgvar("PRIVATE_GROUP_BOT_API_ID", groupid)
-        LOGS.info("Private Group for PRIVATE_GROUP_BOT_API_ID is created successfully and added to vars.")
-        flag = True
+        LOGS.info("BOTLOG disabled; skipping bot log group creation.")
+        Config.BOTLOG_CHATID = "me"
+        return
     if PM_LOGGER_GROUP_ID != -100:
         await check_send_message_permission(PM_LOGGER_GROUP_ID, "PM_LOGGER_GROUP_ID")
     if flag:

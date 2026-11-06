@@ -130,6 +130,9 @@ def manage_dir(path, num):
 @catub.tgbot.on(CallbackQuery(pattern=r"fmback"))
 @check_owner
 async def back(event):
+    if not PATH:
+        await event.answer("No path loaded. Open file manager first.", alert=True)
+        return
     path = PATH[0]
     paths = path.split("/")
     if paths[-1] == "":
@@ -151,6 +154,9 @@ async def up(event):
         await event.answer("Its a File dummy!", alert=True)
     else:
         num1 = int(num) - 1
+        if not PATH:
+            await event.answer("No path loaded. Open file manager first.", alert=True)
+            return
         path = PATH[0]
         msg, buttons = get_manager(path, num1)
         await asyncio.sleep(1)
@@ -165,6 +171,9 @@ async def down(event):
     if num == "File":
         await event.answer("Its a file dummy!", alert=True)
     else:
+        if not PATH:
+            await event.answer("No path loaded. Open file manager first.", alert=True)
+            return
         path = PATH[0]
         num1 = int(num) + 1
         msg, buttons = get_manager(path, num1)
@@ -180,6 +189,9 @@ async def forth(event):
     if npath == "File":
         await event.answer("Its a file dummy!", alert=True)
     else:
+        if not PATH:
+            await event.answer("No path loaded. Open file manager first.", alert=True)
+            return
         path = PATH[0]
         npath = npath[2:-4]
         rpath = f"{path}/{npath}"
@@ -194,6 +206,9 @@ async def forth(event):
 @check_owner
 async def remove(event):
     fn, num = (event.pattern_match.group(1).decode("UTF-8")).split("|", 1)
+    if not PATH:
+        await event.answer("No path loaded. Open file manager first.", alert=True)
+        return
     path = PATH[0]
     if fn == "File":
         paths = path.split("/")

@@ -82,6 +82,8 @@ async def build_article(
 ):
     builder = event.builder
     photo_document = None
+    if text is None:
+        text = title or description or " "
     if media:
         if not media.endswith((".jpg", ".jpeg", ".png")):
             # Return a document object with the provided media URL
@@ -162,7 +164,7 @@ async def deploy_article(event):
 
 async def pmpermit_article(event):
     buttons = [Button.inline(text="Show Options.", data="show_pmpermit_options")]
-    query = gvarstatus("PM_TEXT")
+    query = gvarstatus("PM_TEXT") or "You have been permitted to PM."
     media = None
     if PM_PIC := gvarstatus("PM_PIC"):
         CAT = list(PM_PIC.split())

@@ -301,7 +301,10 @@ async def insta_dl(event):
         try:
             v1_flag = await conv.send_message("/start")
         except YouBlockedUserError:
-            await catub(unblock("Fullsavebot"))
+            try:
+                await catub(unblock("Fullsavebot"))
+            except Exception:
+                pass
             v1_flag = await conv.send_message("/start")
         checker = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
@@ -339,7 +342,10 @@ async def insta_dl(event):
             try:
                 v2_flag = await conv.send_message("/start")
             except YouBlockedUserError:
-                await catub(unblock("videomaniacbot"))
+                try:
+                    await catub(unblock("videomaniacbot"))
+                except Exception:
+                    pass
                 v2_flag = await conv.send_message("/start")
             await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
