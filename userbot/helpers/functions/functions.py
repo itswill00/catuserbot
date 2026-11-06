@@ -78,9 +78,12 @@ def sanga_seperator(sanga_list):
 # covid india data
 async def covidindia(state):
     url = "https://www.mohfw.gov.in/data/datanew.json"
-    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
-        req = (await client.get(url)).json()
-    return next((req[states.index(i)] for i in states if i == state), None)
+    try:
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+            req = (await client.get(url)).json()
+        return next((req[states.index(i)] for i in states if i == state), None)
+    except Exception:
+        return None
 
 
 async def post_to_telegraph(
