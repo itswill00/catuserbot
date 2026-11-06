@@ -50,7 +50,7 @@ async def _(event):
     downloaded_file_name = await event.client.download_media(
         reply_message,
         downloaded_file_name,
-        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "trying to download", file_name)),
+        progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, catevent, c_time, "trying to download", file_name)),
     )
     end = datetime.now()
     ms_one = (end - start).seconds
@@ -69,7 +69,7 @@ async def _(event):
         allow_cache=False,
         reply_to=reply_to_id,
         thumb=thumb,
-        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, event, c_time, "trying to upload", downloaded_file_name)),
+        progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, event, c_time, "trying to upload", downloaded_file_name)),
     )
     end_two = datetime.now()
     os.remove(downloaded_file_name)

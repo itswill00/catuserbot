@@ -172,7 +172,7 @@ async def download_audio(event):  # sourcery skip: low-code-quality
             thumb_pic = str(await pool.run_in_thread(download)(await get_ytthumb(get_yt_video_id(url))))
         uploaded = await event.client.fast_upload_file(
             file=ul,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+            progress_callback=lambda d, t: asyncio.get_running_loop().create_task(
                 progress(
                     d,
                     t,
@@ -247,7 +247,7 @@ async def download_video(event):
             attributes, mime_type = await fix_attributes(f, ytdl_data, supports_streaming=True)
             uploaded = await event.client.fast_upload_file(
                 file=ul,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "Upload :", file_name=ytdl_data["title"])),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, catevent, c_time, "Upload :", file_name=ytdl_data["title"])),
             )
             ul.close()
             media = types.InputMediaUploadedDocument(

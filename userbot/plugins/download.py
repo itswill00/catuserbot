@@ -83,19 +83,19 @@ async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
         if not reply.document and reply.photo and file_name and file_name.suffix or not reply.document and not reply.photo:
             await reply.download_media(
                 file=file_name.absolute(),
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
             )
         elif not reply.document:
             file_name = await reply.download_media(
                 file=downloads,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
             )
         else:
             dl = io.FileIO(file_name.absolute(), "a")
             await event.client.fast_download_file(
                 location=reply.document,
                 out=dl,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
             )
             dl.close()
         end = datetime.now()
@@ -219,19 +219,19 @@ async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     if not reply.document and reply.photo and file_name and file_name.suffix or not reply.document and not reply.photo:
         await reply.download_media(
             file=file_name.absolute(),
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
+            progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
         )
     elif not reply.document:
         file_name = await reply.download_media(
             file=location,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
+            progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
         )
     else:
         dl = io.FileIO(file_name.absolute(), "a")
         await event.client.fast_download_file(
             location=reply.document,
             out=dl,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
+            progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
         )
         dl.close()
     end = datetime.now()

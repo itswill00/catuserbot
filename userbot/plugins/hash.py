@@ -89,7 +89,7 @@ async def endecrypt(event):
                 downloaded_file_name = await event.client.download_media(
                     reply,
                     Config.TMP_DOWNLOAD_DIRECTORY,
-                    progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "trying to download")),
+                    progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, catevent, c_time, "trying to download")),
                 )
                 catevent = await edit_or_reply(event, "`Encoding ...`")
                 async with aiofiles.open(downloaded_file_name, "rb") as image_file:

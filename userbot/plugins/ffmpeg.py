@@ -132,7 +132,7 @@ async def ffmpeg_compress(event):  # sourcery skip: low-code-quality
             await event.client.fast_download_file(
                 location=reply_message.document,
                 out=dl,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "Trying to download")),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, catevent, c_time, "Trying to download")),
             )
             dl.close()
         except Exception as e:
@@ -176,7 +176,7 @@ async def ffmpeg_compress(event):  # sourcery skip: low-code-quality
                 supports_streaming=True,
                 allow_cache=False,
                 reply_to=reply_to_id,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "Trying to upload")),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, catevent, c_time, "Trying to upload")),
             )
             os.remove(compress)
         except Exception as e:
@@ -194,7 +194,7 @@ async def ffmpeg_compress(event):  # sourcery skip: low-code-quality
                 supports_streaming=True,
                 allow_cache=False,
                 reply_to=reply_to_id,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "Trying to upload")),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, catevent, c_time, "Trying to upload")),
             )
             os.remove(compress)
         except Exception as e:
@@ -240,7 +240,7 @@ async def ff_mpeg_save_cmd(event):
                 await event.client.fast_download_file(
                     location=reply_message.document,
                     out=dl,
-                    progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "trying to download")),
+                    progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, catevent, c_time, "trying to download")),
                 )
                 dl.close()
             except Exception as e:
@@ -305,7 +305,7 @@ async def ff_mpeg_vtrim_cmd(event):
                 supports_streaming=True,
                 allow_cache=False,
                 reply_to=reply_to_id,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "trying to upload")),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, catevent, c_time, "trying to upload")),
             )
             os.remove(o)
         except Exception as e:
@@ -326,7 +326,7 @@ async def ff_mpeg_vtrim_cmd(event):
                 supports_streaming=True,
                 allow_cache=False,
                 reply_to=event.message.id,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "trying to upload")),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, catevent, c_time, "trying to upload")),
             )
             os.remove(o)
         except Exception as e:
@@ -390,7 +390,7 @@ async def ff_mpeg_atrim_cmd(event):
             supports_streaming=True,
             allow_cache=False,
             reply_to=reply_to_id,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "trying to upload")),
+            progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, catevent, c_time, "trying to upload")),
         )
         os.remove(o)
     except Exception as e:

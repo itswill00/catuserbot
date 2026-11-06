@@ -176,7 +176,7 @@ async def unzip_file(event):  # sourcery no-metrics
             await event.client.fast_download_file(
                 location=reply.document,
                 out=dl,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
             )
             dl.close()
         except Exception as e:
@@ -264,7 +264,7 @@ async def untar_file(event):  # sourcery no-metrics
             await event.client.fast_download_file(
                 location=reply.document,
                 out=dl,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, mone, c_time, "trying to download")),
             )
             dl.close()
         except Exception as e:

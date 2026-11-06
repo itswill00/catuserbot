@@ -203,7 +203,7 @@ async def download(event, gdrive, service, uri=None):  # sourcery no-metrics  # 
             downloaded_file_name = await event.client.download_media(
                 await event.get_reply_message(),
                 TMP_DOWNLOAD_DIRECTORY,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(
                     progress(
                         d,
                         t,
@@ -1375,7 +1375,7 @@ async def g_download(event):
             thumb=thumb,
             force_document=False,
             supports_streaming=True,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "Uploading...", file_name)),
+            progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, catevent, c_time, "Uploading...", file_name)),
         )
         os.remove(file_name)
         await edit_delete(

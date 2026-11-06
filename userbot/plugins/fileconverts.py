@@ -211,7 +211,7 @@ async def video_catfile(event):  # sourcery no-metrics
             ul = io.open(PATH, "rb")
             uploaded = await event.client.fast_upload_file(
                 file=ul,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "Uploading....")),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, catevent, c_time, "Uploading....")),
             )
             ul.close()
             media = types.InputMediaUploadedDocument(
@@ -511,7 +511,7 @@ async def _(event):
         downloaded_file_name = await event.client.download_media(
             reply_message,
             Config.TMP_DOWNLOAD_DIRECTORY,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, event, c_time, "trying to download")),
+            progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, event, c_time, "trying to download")),
         )
     except Exception as e:
         await event.edit(str(e))
@@ -580,7 +580,7 @@ async def _(event):
                 force_document=force_document,
                 voice_note=voice_note,
                 supports_streaming=supports_streaming,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, event, c_time, "trying to upload")),
+                progress_callback=lambda d, t: asyncio.get_running_loop().create_task(progress(d, t, event, c_time, "trying to upload")),
             )
             os.remove(new_required_file_name)
             await event.delete()
