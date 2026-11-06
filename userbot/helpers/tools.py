@@ -75,7 +75,12 @@ async def media_type(message):
 
 async def fileinfo(file):
     x, y, z, s = await runcmd(f"mediainfo '{file}' --Output=JSON")
-    cat_json = json.loads(x)["media"]["track"]
+    try:
+        cat_json = json.loads(x)["media"]["track"]
+    except (TypeError, KeyError, json.JSONDecodeError):
+        return None
+    if not cat_json:
+        return None
     dic = {
         "path": file,
         "size": int(cat_json[0]["FileSize"]),
@@ -100,6 +105,8 @@ async def file_type(message):
     if not os.path.exists(message):
         return None
     media = await fileinfo(message)
+    if not media:
+        return None
     if media["type"] == "Image":
         if media["format"] == "GIF":
             return "Gif"
